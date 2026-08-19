@@ -5,12 +5,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#030712">
-<title>RUNTRACK ULTIMATE V7</title>
+<title>RUNTRACK ULTIMATE V8</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root {
   --bg-deep: #030712;
-  --card-glass: rgba(17, 24, 39, 0.7);
+  --card-glass: rgba(17, 24, 39, 0.75);
   --border-glass: rgba(255, 255, 255, 0.08);
   --neon-green: #00ff8e;
   --neon-cyan: #00f0ff;
@@ -21,7 +21,7 @@
 }
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
-body{background:var(--bg-deep);color:var(--text-main);font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;padding:12px;direction:rtl;overflow-x:hidden}
+body{background:var(--bg-deep);color:var(--text-main);font-family:system-ui,-apple-system,sans-serif;padding:12px;direction:rtl;overflow-x:hidden}
 .app{max-width:900px;margin:auto;display:flex;flex-direction:column;gap:12px}
 
 header{display:flex;align-items:center;justify-content:space-between;padding:4px 6px}
@@ -33,15 +33,14 @@ header{display:flex;align-items:center;justify-content:space-between;padding:4px
 .dot.hybrid{background:var(--neon-cyan);box-shadow:0 0 10px var(--neon-cyan)}
 .dot.warn{background:var(--neon-amber)}
 
-/* Hero Header & Live Avatar */
+/* Hero Section */
 .hero{background:linear-gradient(135deg,rgba(17,24,39,0.9),rgba(3,7,18,0.95));border:1px solid var(--border-glass);border-radius:28px;padding:24px 16px;text-align:center;position:relative;overflow:hidden;backdrop-filter:blur(16px);box-shadow:0 20px 40px rgba(0,0,0,0.6)}
 .hero-bg-glow{position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:250px;height:250px;background:radial-gradient(circle,rgba(0,255,142,0.15) 0%,transparent 70%);pointer-events:none}
 .state{font-size:11px;color:var(--neon-cyan);font-weight:800;letter-spacing:2px;text-transform:uppercase}
 
-/* Live Runner Canvas Animation */
-#runnerCanvas{width:100px;height:70px;margin:0 auto;display:block}
+#runnerCanvas{width:100px;height:65px;margin:0 auto;display:block}
 
-.time{font-size:46px;font-weight:900;letter-spacing:-1px;margin:2px 0;font-variant-numeric:tabular-nums;text-shadow:0 0 20px rgba(255,255,255,0.1)}
+.time{font-size:46px;font-weight:900;letter-spacing:-1px;margin:2px 0;font-variant-numeric:tabular-nums}
 .dist{font-size:72px;line-height:0.95;font-weight:900;letter-spacing:-2px;color:#fff;margin:8px 0}
 .dist small{font-size:18px;color:var(--text-sub);margin-right:6px}
 .pace-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,255,142,0.08);border:1px solid rgba(0,255,142,0.2);padding:6px 16px;border-radius:20px;color:var(--neon-green);font-size:13px;font-weight:800}
@@ -53,30 +52,44 @@ header{display:flex;align-items:center;justify-content:space-between;padding:4px
 .btn-pause{background:#1f2937;color:#fff;border:1px solid var(--border-glass);display:none}
 .btn-finish{background:linear-gradient(135deg,var(--neon-red),#dc2626);color:#fff;box-shadow:0 4px 20px rgba(255,42,109,0.35);display:none}
 
-/* Grid Dashboard */
+/* Grid Dashboards */
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .card{background:var(--card-glass);border:1px solid var(--border-glass);border-radius:20px;padding:14px 10px;text-align:center;backdrop-filter:blur(12px)}
 .card .label{font-size:10px;color:var(--text-sub);font-weight:800;letter-spacing:0.5px}
-.card .val{font-size:22px;font-weight:900;margin-top:4px;font-variant-numeric:tabular-nums;color:#fff}
+.card .val{font-size:20px;font-weight:900;margin-top:4px;font-variant-numeric:tabular-nums;color:#fff}
 .card .unit{font-size:9px;color:var(--text-sub);margin-top:2px}
 
-/* Panels */
+/* Weather Highlight Card */
+.weather-card{background:linear-gradient(135deg,rgba(0,240,255,0.08),rgba(17,24,39,0.8));border:1px solid rgba(0,240,255,0.2)}
+
 .panel{background:var(--card-glass);border:1px solid var(--border-glass);border-radius:22px;padding:16px;backdrop-filter:blur(12px)}
 .panelhead{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;margin-bottom:12px}
 
 #map{height:300px;border-radius:20px;overflow:hidden;border:1px solid var(--border-glass)}
 
-/* Cadence Gauge */
-.cadence-bar{height:10px;background:#111827;border-radius:10px;overflow:hidden;position:relative;margin-top:8px}
-.cadence-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-green));transition:width 0.3s}
-.cadence-target{position:absolute;left:60%;top:0;bottom:0;width:20%;background:rgba(255,255,255,0.15);border-left:1px dashed var(--neon-green);border-right:1px dashed var(--neon-green)}
+/* Modals & Overlays */
+.modal-overlay{position:fixed;inset:0;background:rgba(3,7,18,0.85);backdrop-filter:blur(12px);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal-box{background:rgba(17,24,39,0.95);border:1px solid var(--border-glass);border-radius:28px;padding:24px;width:100%;max-width:420px;text-align:center;box-shadow:0 25px 50px rgba(0,0,0,0.8)}
+.modal-title{font-size:20px;font-weight:900;margin-bottom:8px;color:#fff}
+.modal-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0;text-align:right}
+.stat-box{background:rgba(31,41,55,0.5);padding:10px 14px;border-radius:14px;border:1px solid var(--border-glass)}
+.stat-box small{font-size:10px;color:var(--text-sub);display:block}
+.stat-box b{font-size:16px;color:var(--neon-green)}
 
-/* Toast Notifications for Badges */
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(17,24,39,0.95);border:1px solid var(--neon-green);box-shadow:0 10px 30px rgba(0,255,142,0.3);padding:12px 24px;border-radius:30px;display:flex;align-items:center;gap:10px;z-index:9999;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);opacity:0}
-.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.modal-btns{display:flex;flex-direction:column;gap:8px;margin-top:20px}
+.btn-save{background:var(--neon-green);color:#022c22;font-weight:900;padding:12px;border-radius:30px;border:0;cursor:pointer}
+.btn-share{background:var(--neon-cyan);color:#031d2e;font-weight:900;padding:12px;border-radius:30px;border:0;cursor:pointer}
+.btn-discard{background:transparent;color:var(--neon-red);font-weight:700;padding:10px;border-radius:30px;border:0;cursor:pointer}
+
+/* History List Item */
+.history-card{background:rgba(31,41,55,0.4);border:1px solid var(--border-glass);border-radius:16px;padding:12px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.history-info div:first-child{font-weight:800;font-size:14px;color:#fff}
+.history-info div:last-child{font-size:11px;color:var(--text-sub);margin-top:4px}
+.history-actions{display:flex;gap:6px}
+.icon-btn{background:rgba(255,255,255,0.06);border:1px solid var(--border-glass);border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;font-size:14px}
 
 canvas#paceChart{width:100%;height:90px;display:block}
-.history-item{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;padding:12px 0;border-bottom:1px solid var(--border-glass);font-size:11px;text-align:center}
 
 @media(max-width:600px){
   .grid{grid-template-columns:repeat(2,1fr)}
@@ -89,7 +102,7 @@ canvas#paceChart{width:100%;height:90px;display:block}
 
 <div class="app">
   <header>
-    <div class="logo">RUN<span>TRACK</span> <small style="font-size:10px;color:var(--text-sub)">V7 ULTIMATE</small></div>
+    <div class="logo">RUN<span>TRACK</span> <small style="font-size:10px;color:var(--text-sub)">V8 PRO</small></div>
     <div class="status-pill">
       <div id="gpsDot" class="dot"></div>
       <span id="gpsText">تحديد الموقع...</span>
@@ -107,57 +120,60 @@ canvas#paceChart{width:100%;height:90px;display:block}
     <div class="actions">
       <button id="startBtn" class="btn btn-start" onclick="startRun()">▶ انطلاق</button>
       <button id="pauseBtn" class="btn btn-pause" onclick="togglePause()">Ⅱ إيقاف</button>
-      <button id="finishBtn" class="btn btn-finish" onclick="finishRun()">■ إنهاء</button>
+      <button id="finishBtn" class="btn btn-finish" onclick="promptFinishRun()">■ إنهاء</button>
     </div>
   </section>
 
+  <!-- Weather & Running Metrics Grid -->
   <section class="grid">
+    <div class="card weather-card"><div class="label">💨 سرعة الرياح</div><div id="windSpeed" class="val" style="color:var(--neon-cyan)">--</div><div class="unit">كم/ساعة</div></div>
+    <div class="card weather-card"><div class="label">💧 الرطوبة</div><div id="humidity" class="val" style="color:var(--neon-cyan)">--</div><div class="unit">%</div></div>
     <div class="card"><div class="label">السرعة</div><div id="speed" class="val">0.0</div><div class="unit">كم/ساعة</div></div>
     <div class="card"><div class="label">معدل الوتيرة</div><div id="avgPace" class="val">--:--</div><div class="unit">دقيقة/كم</div></div>
     <div class="card"><div class="label">الإيقاع (SPM)</div><div id="spm" class="val">0</div><div class="unit">خطوة/دقيقة</div></div>
     <div class="card"><div class="label">السعرات</div><div id="calories" class="val">0</div><div class="unit">دورة حرارية</div></div>
     <div class="card"><div class="label">إجمالي الخطوات</div><div id="steps" class="val">0</div><div class="unit">خطوة</div></div>
     <div class="card"><div class="label">دقة GPS</div><div id="accuracy" class="val">--</div><div class="unit">أمتار</div></div>
-    <div class="card"><div class="label">نمط التتبع</div><div id="trackingMode" class="val" style="font-size:14px;color:var(--neon-green)">HYBRID</div><div class="unit">ذكي</div></div>
-    <div class="card"><div class="label">المسافة بالدقة</div><div id="metersExact" class="val">0</div><div class="unit">أمتار صافية</div></div>
-  </section>
-
-  <section class="panel">
-    <div class="panelhead">
-      <span>🏃 مؤشر إيقاع الخطوات (Cadence Target)</span>
-      <span id="cadenceStatus" style="color:var(--neon-cyan)">مثالي (160-180)</span>
-    </div>
-    <div class="cadence-bar">
-      <div class="cadence-target"></div>
-      <div id="cadenceFill" class="cadence-fill"></div>
-    </div>
   </section>
 
   <div id="map"></div>
 
   <section class="panel">
-    <div class="panelhead"><span>📊 الرسم البياني اللحظي للسرعة والوتيرة</span></div>
+    <div class="panelhead"><span>📊 الرسم البياني اللحظي للسرعة</span></div>
     <canvas id="paceChart"></canvas>
   </section>
 
   <section class="panel">
-    <div class="panelhead"><span>🏆 سجل التمارين والأرقام القياسية</span></div>
+    <div class="panelhead"><span>🏆 سجل الركضات المحفوظة</span></div>
     <div id="history"><div style="color:var(--text-sub);font-size:12px;text-align:center">لا يوجد تمارين مسجلة بعد.</div></div>
   </section>
 </div>
 
-<!-- Toast Popup Notification for Achievements -->
-<div id="toast" class="toast">
-  <span style="font-size:24px">🏅</span>
-  <div>
-    <div id="toastTitle" style="font-weight:900;color:#fff;font-size:14px">إنجاز جديد!</div>
-    <div id="toastDesc" style="font-size:11px;color:var(--text-sub)">لقد قطعت الكيلومتر الأول بنجاح.</div>
+<!-- Save & Share Modal -->
+<div id="saveModal" class="modal-overlay">
+  <div class="modal-box">
+    <div style="font-size:36px;margin-bottom:6px">🏅</div>
+    <div class="modal-title">تمرين اكمل بنجاح!</div>
+    <p style="font-size:12px;color:var(--text-sub)">هل تريد حفظ هذا التمرين في سجلك الشخصي؟</p>
+    
+    <div class="modal-stats">
+      <div class="stat-box"><small>المسافة الإجمالية</small><b id="mDist">0.000 كم</b></div>
+      <div class="stat-box"><small>الزمن الكلي</small><b id="mTime">00:00:00</b></div>
+      <div class="stat-box"><small>معدل الوتيرة</small><b id="mPace">--:-- /كم</b></div>
+      <div class="stat-box"><small>إجمالي الخطوات</small><b id="mSteps">0 خطوة</b></div>
+    </div>
+
+    <div class="modal-btns">
+      <button class="btn-save" onclick="confirmSaveRun()">💾 حفظ التمرين</button>
+      <button class="btn-share" onclick="shareCurrentRun()">📤 مشاركة الإنجاز</button>
+      <button class="btn-discard" onclick="discardRun()">🗑️ تجاهل وعدم الحفظ</button>
+    </div>
   </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// --- Kalman Filter ---
+// --- Kalman Filter Engine ---
 class KalmanFilter2D {
   constructor(processNoise = 1.5) {
     this.processNoise = processNoise;
@@ -184,13 +200,24 @@ let startTime = 0, pausedTotal = 0, pauseAt = 0;
 let lastPoint = null, totalDistanceMeters = 0;
 let route = [], line = null, marker = null;
 let paceHistory = [], stepTimes = [], totalSteps = 0;
-let lastKmAnnounced = 0;
+let currentRunData = null;
 
-// Dark Leaflet Map Setup
 const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([31.7683, 35.2137], 16);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 20 }).addTo(map);
 
-// --- Live Runner Avatar Canvas Animation ---
+// --- Weather Fetcher (Open-Meteo API) ---
+async function fetchWeather(lat, lon) {
+  try {
+    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=relative_humidity_2m,wind_speed_10m`);
+    const data = await res.json();
+    if (data && data.current) {
+      document.getElementById('windSpeed').innerText = Math.round(data.current.wind_speed_10m);
+      document.getElementById('humidity').innerText = Math.round(data.current.relative_humidity_2m);
+    }
+  } catch (e) { console.log("Weather fetch offline/failed", e); }
+}
+
+// --- Live Runner Avatar Animation ---
 const canvasRunner = document.getElementById('runnerCanvas');
 const ctxRunner = canvasRunner.getContext('2d');
 let animLegAngle = 0;
@@ -200,36 +227,24 @@ function drawRunner(speedKmh = 0) {
   canvasRunner.height = canvasRunner.offsetHeight;
   ctxRunner.clearRect(0, 0, canvasRunner.width, canvasRunner.height);
   
-  const cx = canvasRunner.width / 2;
-  const cy = canvasRunner.height / 2;
+  const cx = canvasRunner.width / 2, cy = canvasRunner.height / 2;
+  if (running && !paused && speedKmh > 0.5) animLegAngle += Math.min(0.4, 0.08 + speedKmh * 0.015);
   
-  if (running && !paused && speedKmh > 0.5) {
-    animLegAngle += Math.min(0.4, 0.08 + speedKmh * 0.015);
-  }
+  const leg1 = Math.sin(animLegAngle) * 16, leg2 = -Math.sin(animLegAngle) * 16;
   
-  const leg1 = Math.sin(animLegAngle) * 18;
-  const leg2 = -Math.sin(animLegAngle) * 18;
-  
-  ctxRunner.strokeStyle = '#00ff8e';
-  ctxRunner.lineWidth = 3.5;
-  ctxRunner.lineCap = 'round';
-  
-  // Head
-  ctxRunner.beginPath(); ctxRunner.arc(cx, cy - 18, 5, 0, Math.PI * 2); ctxRunner.stroke();
-  // Body
-  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy - 13); ctxRunner.lineTo(cx, cy + 5); ctxRunner.stroke();
-  // Legs
-  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy + 5); ctxRunner.lineTo(cx + leg1, cy + 22); ctxRunner.stroke();
-  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy + 5); ctxRunner.lineTo(cx + leg2, cy + 22); ctxRunner.stroke();
-  // Arms
-  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy - 8); ctxRunner.lineTo(cx - leg1*0.8, cy + 4); ctxRunner.stroke();
-  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy - 8); ctxRunner.lineTo(cx + leg1*0.8, cy + 4); ctxRunner.stroke();
+  ctxRunner.strokeStyle = '#00ff8e'; ctxRunner.lineWidth = 3.5; ctxRunner.lineCap = 'round';
+  ctxRunner.beginPath(); ctxRunner.arc(cx, cy - 16, 5, 0, Math.PI * 2); ctxRunner.stroke(); // Head
+  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy - 11); ctxRunner.lineTo(cx, cy + 5); ctxRunner.stroke(); // Body
+  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy + 5); ctxRunner.lineTo(cx + leg1, cy + 20); ctxRunner.stroke(); // Legs
+  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy + 5); ctxRunner.lineTo(cx + leg2, cy + 20); ctxRunner.stroke();
+  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy - 6); ctxRunner.lineTo(cx - leg1*0.8, cy + 4); ctxRunner.stroke(); // Arms
+  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy - 6); ctxRunner.lineTo(cx + leg1*0.8, cy + 4); ctxRunner.stroke();
   
   if (running && !paused) animFrame = requestAnimationFrame(() => drawRunner(speedKmh));
 }
 drawRunner(0);
 
-// --- Motion & Step Detector Engine ---
+// --- Pedometer & Motion Sensors ---
 if (window.DeviceMotionEvent) {
   let lastAccelMag = 0;
   window.addEventListener('devicemotion', (e) => {
@@ -237,74 +252,47 @@ if (window.DeviceMotionEvent) {
     const acc = e.accelerationIncludingGravity;
     if (acc) {
       const mag = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
-      const delta = mag - lastAccelMag;
-      lastAccelMag = mag;
-      
-      // Step Peak Detection
-      if (delta > 2.8) {
+      if (mag - lastAccelMag > 2.8) {
         const now = Date.now();
         if (!stepTimes.length || (now - stepTimes[stepTimes.length - 1]) > 230) {
           totalSteps++;
           stepTimes.push(now);
           document.getElementById('steps').innerText = totalSteps;
           
-          // Dead-Reckoning Fallback: Add distance if GPS drops
           if (!lastPoint || (Date.now() - lastPoint.time) > 3500) {
-            const dynamicStepLength = 0.75; // meters per step
-            totalDistanceMeters += dynamicStepLength;
-            updateMetrics(3.6); // Estimated 3.6 km/h pace fallback
-            document.getElementById('trackingMode').innerText = 'PEDO';
-            document.getElementById('trackingMode').style.color = 'var(--neon-cyan)';
+            totalDistanceMeters += 0.75; // Fallback step calculation
+            updateMetrics(3.6);
           }
         }
       }
+      lastAccelMag = mag;
     }
   });
 }
 
-function calculateSPM() {
-  const now = Date.now();
-  stepTimes = stepTimes.filter(t => (now - t) <= 10000); // last 10s
-  const spm = Math.round((stepTimes.length / 10) * 60);
-  document.getElementById('spm').innerText = spm;
-  
-  // Cadence Bar
-  const pct = Math.min(100, (spm / 200) * 100);
-  document.getElementById('cadenceFill').style.width = pct + '%';
-  
-  const status = document.getElementById('cadenceStatus');
-  if (spm >= 160 && spm <= 180) { status.innerText = 'مثالي (160-180)'; status.style.color = 'var(--neon-green)'; }
-  else if (spm > 180) { status.innerText = 'سريع جداً'; status.style.color = 'var(--neon-amber)'; }
-  else { status.innerText = 'منخفض'; status.style.color = 'var(--neon-cyan)'; }
-}
-
-// --- GPS Processing ---
+// --- GPS Core ---
 function startRun() {
-  if (!navigator.geolocation) return alert('الـ GPS غير مدعوم.');
+  if (!navigator.geolocation) return alert('الـ GPS غير مدعوم في هذا الجهاز.');
   navigator.geolocation.getCurrentPosition(p => {
     resetRun();
     running = true;
     startTime = Date.now();
-    watchId = navigator.geolocation.watchPosition(processGPS, gpsError, {
-      enableHighAccuracy: true, maximumAge: 0, timeout: 5000
-    });
+    fetchWeather(p.coords.latitude, p.coords.longitude);
+    
+    watchId = navigator.geolocation.watchPosition(processGPS, gpsError, { enableHighAccuracy: true, maximumAge: 0, timeout: 5000 });
     timer = setInterval(tick, 200);
     drawRunner(0);
     
     document.getElementById('startBtn').style.display = 'none';
     document.getElementById('pauseBtn').style.display = 'inline-block';
     document.getElementById('finishBtn').style.display = 'inline-block';
-    document.getElementById('state').innerText = 'جاري الجري والتتبع...';
-    speak('تم بدء التمرين. حظاً موفقاً!');
+    document.getElementById('state').innerText = 'جاري التتبع...';
   }, gpsError, { enableHighAccuracy: true });
 }
 
 function processGPS(p) {
   if (!running || paused) return;
-  const c = p.coords;
-  const rawAcc = c.accuracy || 20;
-  const now = p.timestamp || Date.now();
-  
+  const c = p.coords, rawAcc = c.accuracy || 20, now = p.timestamp || Date.now();
   updateGPSUI(rawAcc);
   
   const filtered = kalman.process(c.latitude, c.longitude, rawAcc);
@@ -320,36 +308,22 @@ function processGPS(p) {
   const d = haversine(lastPoint.lat, lastPoint.lng, lat, lng);
   const speedKmh = (c.speed && c.speed >= 0) ? c.speed * 3.6 : (d / dt) * 3.6;
   
-  if (speedKmh > 42) return; // Plausibility filter
-  
+  if (speedKmh > 42) return;
   if (d >= 0.3) {
     totalDistanceMeters += d;
     lastPoint = { lat, lng, time: now };
     drawMap(lat, lng, speedKmh);
-    document.getElementById('trackingMode').innerText = 'GPS+HYBRID';
-    document.getElementById('trackingMode').style.color = 'var(--neon-green)';
   }
-  
   updateMetrics(speedKmh);
 }
 
 function updateMetrics(speedKmh) {
-  const km = totalDistanceMeters / 1000;
-  const elapsed = getElapsedSec();
-  
+  const km = totalDistanceMeters / 1000, elapsed = getElapsedSec();
   document.getElementById('distance').innerText = km.toFixed(3);
-  document.getElementById('metersExact').innerText = Math.round(totalDistanceMeters);
   document.getElementById('speed').innerText = speedKmh.toFixed(1);
+  document.getElementById('calories').innerText = Math.round(km * 62);
   
-  // Calories (Estimated: ~60 kcal/km)
-  const cals = Math.round(km * 62);
-  document.getElementById('calories').innerText = cals;
-  
-  if (km > 0.005) {
-    const avgPace = elapsed / km;
-    document.getElementById('avgPace').innerText = formatPace(avgPace);
-  }
-  
+  if (km > 0.005) document.getElementById('avgPace').innerText = formatPace(elapsed / km);
   if (speedKmh > 0.5) {
     const curPace = 3600 / speedKmh;
     document.getElementById('currentPace').innerText = formatPace(curPace);
@@ -361,100 +335,14 @@ function updateMetrics(speedKmh) {
     document.getElementById('currentPace').innerText = '--:--';
   }
   
-  calculateSPM();
-  checkAchievements(km);
+  // Calculate SPM
+  const now = Date.now();
+  stepTimes = stepTimes.filter(t => (now - t) <= 10000);
+  document.getElementById('spm').innerText = Math.round((stepTimes.length / 10) * 60);
 }
 
-// --- Voice Audio Coach ---
-function speak(text) {
-  if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'ar-SA'; u.rate = 1.05;
-    window.speechSynthesis.speak(u);
-  }
-}
-
-function checkAchievements(km) {
-  const currentKmFloor = Math.floor(km);
-  if (currentKmFloor > lastKmAnnounced && currentKmFloor >= 1) {
-    lastKmAnnounced = currentKmFloor;
-    showToast('إنجاز مميز!', `أكملت ${currentKmFloor} كم بنجاح!`);
-    speak(`أكملت ${currentKmFloor} كيلومتر. واصل التقدم!`);
-  }
-}
-
-function showToast(title, desc) {
-  const t = document.getElementById('toast');
-  document.getElementById('toastTitle').innerText = title;
-  document.getElementById('toastDesc').innerText = desc;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 4000);
-}
-
-// --- Map Heatmap Polyline ---
-function drawMap(lat, lng, speed) {
-  route.push([lat, lng]);
-  const color = speed > 12 ? 'var(--neon-green)' : speed > 6 ? 'var(--neon-cyan)' : 'var(--neon-amber)';
-  
-  if (!marker) {
-    marker = L.circleMarker([lat, lng], { radius: 8, color: '#fff', weight: 2, fillColor: '#00ff8e', fillOpacity: 1 }).addTo(map);
-  } else {
-    marker.setLatLng([lat, lng]);
-  }
-  
-  if (!line) {
-    line = L.polyline(route, { color: '#00ff8e', weight: 5, opacity: 0.9 }).addTo(map);
-  } else {
-    line.setLatLngs(route);
-  }
-  map.setView([lat, lng], 17, { animate: false });
-}
-
-// --- Smooth Canvas Pace Chart ---
-function drawCanvasChart() {
-  const canvas = document.getElementById('paceChart');
-  const ctx = canvas.getContext('2d');
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  if (paceHistory.length < 2) return;
-  const min = Math.min(...paceHistory), max = Math.max(...paceHistory), range = (max - min) || 1;
-  
-  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  grad.addColorStop(0, 'rgba(0, 255, 142, 0.3)');
-  grad.addColorStop(1, 'rgba(0, 255, 142, 0.0)');
-  
-  ctx.beginPath();
-  paceHistory.forEach((v, i) => {
-    const x = (i / (paceHistory.length - 1)) * canvas.width;
-    const y = canvas.height - ((v - min) / range) * (canvas.height - 15) - 8;
-    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-  });
-  ctx.strokeStyle = '#00ff8e'; ctx.lineWidth = 2.5; ctx.stroke();
-  
-  ctx.lineTo(canvas.width, canvas.height);
-  ctx.lineTo(0, canvas.height);
-  ctx.fillStyle = grad; ctx.fill();
-}
-
-function togglePause() {
-  if (!running) return;
-  if (!paused) {
-    paused = true; pauseAt = Date.now();
-    document.getElementById('pauseBtn').innerText = '▶ استئناف';
-    document.getElementById('state').innerText = 'متوقف مؤقتاً';
-    speak('تم إيقاف التمرين مؤقتاً');
-  } else {
-    paused = false; pausedTotal += (Date.now() - pauseAt); lastPoint = null;
-    document.getElementById('pauseBtn').innerText = 'Ⅱ إيقاف';
-    document.getElementById('state').innerText = 'جاري الجري...';
-    speak('تم استئناف التمرين');
-  }
-}
-
-function finishRun() {
+// --- Finish & Save Confirmation Modal ---
+function promptFinishRun() {
   if (!running) return;
   running = false; clearInterval(timer);
   if (watchId) navigator.geolocation.clearWatch(watchId);
@@ -463,17 +351,123 @@ function finishRun() {
   const km = totalDistanceMeters / 1000;
   const avgPace = km > 0 ? elapsed / km : 0;
   
-  saveRun({ date: new Date().toLocaleDateString('ar-EG'), dist: km, time: elapsed, pace: avgPace, steps: totalSteps });
+  currentRunData = {
+    id: Date.now(),
+    date: new Date().toLocaleDateString('ar-EG') + ' ' + new Date().toLocaleTimeString('ar-EG', {hour:'2-digit', minute:'2-digit'}),
+    dist: km,
+    time: elapsed,
+    pace: avgPace,
+    steps: totalSteps,
+    cals: Math.round(km * 62)
+  };
   
-  document.getElementById('state').innerText = 'اكتمل التمرين 🎉';
+  document.getElementById('mDist').innerText = km.toFixed(3) + ' كم';
+  document.getElementById('mTime').innerText = formatTime(elapsed);
+  document.getElementById('mPace').innerText = formatPace(avgPace) + ' /كم';
+  document.getElementById('mSteps').innerText = totalSteps + ' خطوة';
+  
+  document.getElementById('saveModal').classList.add('active');
+}
+
+function confirmSaveRun() {
+  if (currentRunData) {
+    saveRun(currentRunData);
+    loadHistory();
+  }
+  closeModal();
+  resetRunUI();
+}
+
+function discardRun() {
+  closeModal();
+  resetRunUI();
+}
+
+function closeModal() {
+  document.getElementById('saveModal').classList.remove('active');
+}
+
+function resetRunUI() {
+  document.getElementById('state').innerText = 'جاهز للانطلاق';
   document.getElementById('startBtn').style.display = 'inline-block';
   document.getElementById('pauseBtn').style.display = 'none';
   document.getElementById('finishBtn').style.display = 'none';
-  speak(`تمرين مكتمل! المسافة الإجمالية ${km.toFixed(2)} كيلومتر. عمل رائع!`);
-  loadHistory();
+  resetRun();
 }
 
-// --- Helpers ---
+// --- Web Share API ---
+async function shareCurrentRun() {
+  if (!currentRunData) return;
+  const text = `🏃 أكملت ركضة جديدة بنجاح على RUNTRACK!\n📏 المسافة: ${currentRunData.dist.toFixed(2)} كم\n⏱️ الوقت: ${formatTime(currentRunData.time)}\n⚡ الوتيرة: ${formatPace(currentRunData.pace)} /كم\n👟 الخطوات: ${currentRunData.steps}`;
+  
+  if (navigator.share) {
+    try { await navigator.share({ title: 'تمريني على RUNTRACK', text: text }); } catch(e){}
+  } else {
+    navigator.clipboard.writeText(text);
+    alert('تم نسخ ملخص التمرين إلى المحفظة بنجاح!');
+  }
+}
+
+function sharePastRun(id) {
+  let h = JSON.parse(localStorage.getItem('runtrack_v8') || '[]');
+  let item = h.find(x => x.id === id);
+  if (item) {
+    const text = `🏃 ركضة سابقة من RUNTRACK (${item.date}):\n📏 المسافة: ${item.dist.toFixed(2)} كم\n⏱️ الوقت: ${formatTime(item.time)}\n⚡ الوتيرة: ${formatPace(item.pace)} /كم`;
+    if (navigator.share) navigator.share({ title: 'تمريني المحفوظ', text: text });
+    else { navigator.clipboard.writeText(text); alert('تم نسخ ملخص التمرين!'); }
+  }
+}
+
+function deleteRun(id) {
+  if (confirm('هل أنت تأكد من حذف هذا التمرين من السجل؟')) {
+    let h = JSON.parse(localStorage.getItem('runtrack_v8') || '[]');
+    h = h.filter(x => x.id !== id);
+    localStorage.setItem('runtrack_v8', JSON.stringify(h));
+    loadHistory();
+  }
+}
+
+// --- Map & Chart Functions ---
+function drawMap(lat, lng, speed) {
+  route.push([lat, lng]);
+  if (!marker) marker = L.circleMarker([lat, lng], { radius: 8, color: '#fff', weight: 2, fillColor: '#00ff8e', fillOpacity: 1 }).addTo(map);
+  else marker.setLatLng([lat, lng]);
+  
+  if (!line) line = L.polyline(route, { color: '#00ff8e', weight: 5, opacity: 0.9 }).addTo(map);
+  else line.setLatLngs(route);
+  map.setView([lat, lng], 17, { animate: false });
+}
+
+function drawCanvasChart() {
+  const canvas = document.getElementById('paceChart'), ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (paceHistory.length < 2) return;
+  
+  const min = Math.min(...paceHistory), max = Math.max(...paceHistory), range = (max - min) || 1;
+  ctx.beginPath();
+  paceHistory.forEach((v, i) => {
+    const x = (i / (paceHistory.length - 1)) * canvas.width;
+    const y = canvas.height - ((v - min) / range) * (canvas.height - 15) - 8;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = '#00ff8e'; ctx.lineWidth = 2.5; ctx.stroke();
+}
+
+function togglePause() {
+  if (!running) return;
+  if (!paused) {
+    paused = true; pauseAt = Date.now();
+    document.getElementById('pauseBtn').innerText = '▶ استئناف';
+    document.getElementById('state').innerText = 'متوقف مؤقتاً';
+  } else {
+    paused = false; pausedTotal += (Date.now() - pauseAt); lastPoint = null;
+    document.getElementById('pauseBtn').innerText = 'Ⅱ إيقاف';
+    document.getElementById('state').innerText = 'جاري الجري...';
+  }
+}
+
+// --- Helpers & Storage ---
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371000;
   const dLat = (lat2 - lat1) * Math.PI / 180, dLon = (lon2 - lon1) * Math.PI / 180;
@@ -487,11 +481,12 @@ function getElapsedSec() {
 }
 
 function tick() {
-  if (running && !paused) {
-    const s = getElapsedSec();
-    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = Math.floor(s % 60);
-    document.getElementById('time').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
-  }
+  if (running && !paused) document.getElementById('time').innerText = formatTime(getElapsedSec());
+}
+
+function formatTime(s) {
+  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = Math.floor(s % 60);
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
 }
 
 function formatPace(s) {
@@ -503,39 +498,45 @@ function updateGPSUI(acc) {
   document.getElementById('accuracy').innerText = Math.round(acc);
   const dot = document.getElementById('gpsDot'), txt = document.getElementById('gpsText');
   if (acc <= 15) { dot.className = 'dot good'; txt.innerText = 'GPS ممتاز'; }
-  else if (acc <= 35) { dot.className = 'dot hybrid'; txt.innerText = 'GPS + خطوات'; }
-  else { dot.className = 'dot warn'; txt.innerText = 'ضعيف (وضع الخطوات)'; }
+  else if (acc <= 35) { dot.className = 'dot hybrid'; txt.innerText = 'GPS متوسط'; }
+  else { dot.className = 'dot warn'; txt.innerText = 'إشارة ضعيفة'; }
 }
 
-function gpsError() { document.getElementById('gpsText').innerText = 'تعذر الـ GPS'; }
+function gpsError() { document.getElementById('gpsText').innerText = 'خطأ بالـ GPS'; }
 
 function resetRun() {
-  totalDistanceMeters = 0; lastPoint = null; route = []; paceHistory = []; stepTimes = []; totalSteps = 0; lastKmAnnounced = 0;
+  totalDistanceMeters = 0; lastPoint = null; route = []; paceHistory = []; stepTimes = []; totalSteps = 0;
   if (line) map.removeLayer(line); line = null;
   if (marker) map.removeLayer(marker); marker = null;
   document.getElementById('distance').innerText = '0.000';
-  document.getElementById('metersExact').innerText = '0';
   document.getElementById('speed').innerText = '0.0';
   document.getElementById('avgPace').innerText = '--:--';
   document.getElementById('currentPace').innerText = '--:--';
   document.getElementById('steps').innerText = '0';
   document.getElementById('calories').innerText = '0';
+  document.getElementById('time').innerText = '00:00:00';
 }
 
 function saveRun(r) {
-  let h = JSON.parse(localStorage.getItem('runtrack_v7') || '[]');
-  h.unshift(r); localStorage.setItem('runtrack_v7', JSON.stringify(h.slice(0, 10)));
+  let h = JSON.parse(localStorage.getItem('runtrack_v8') || '[]');
+  h.unshift(r); localStorage.setItem('runtrack_v8', JSON.stringify(h));
 }
 
 function loadHistory() {
-  let h = JSON.parse(localStorage.getItem('runtrack_v7') || '[]');
-  if (!h.length) return;
-  document.getElementById('history').innerHTML = h.map(x => `
-    <div class="history-item">
-      <div>${x.date}</div>
-      <div>${x.dist.toFixed(3)} كم</div>
-      <div>${formatPace(x.pace)}/كم</div>
-      <div>${x.steps || 0} خطوة</div>
+  let h = JSON.parse(localStorage.getItem('runtrack_v8') || '[]');
+  const container = document.getElementById('history');
+  if (!h.length) { container.innerHTML = '<div style="color:var(--text-sub);font-size:12px;text-align:center">لا يوجد تمارين مسجلة بعد.</div>'; return; }
+  
+  container.innerHTML = h.map(x => `
+    <div class="history-card">
+      <div class="history-info">
+        <div>${x.dist.toFixed(3)} كم · ${formatTime(x.time)}</div>
+        <div>${x.date} · الوتيرة ${formatPace(x.pace)}/كم</div>
+      </div>
+      <div class="history-actions">
+        <button class="icon-btn" onclick="sharePastRun(${x.id})">📤</button>
+        <button class="icon-btn" style="color:var(--neon-red)" onclick="deleteRun(${x.id})">🗑️</button>
+      </div>
     </div>`).join('');
 }
 loadHistory();
