@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-         <meta name="google-site-verification" content="4j5ULNTNE2ixVPpcLIiCN8Q4c06Ce2WU94GCSvMtyeU" />
+                 <meta name="google-site-verification" content="4j5ULNTNE2ixVPpcLIiCN8Q4c06Ce2WU94GCSvMtyeU" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#060911">
-<title>RUNTRACK PRO - 30cm Resolution Edition</title>
+<title>RUNTRACK PRO - 15cm Resolution & 1:30 Pace Edition</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root {
@@ -76,7 +76,24 @@ canvas#telemetryChart{width:100%;height:110px;display:block}
 
 /* History */
 .history-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--border-color);font-size:12px}
-.gpx-btn{background:rgba(0,240,255,0.1);color:var(--accent-cyan);border:1px solid rgba(0,240,255,0.3);padding:6px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer}
+.hist-btns{display:flex;gap:6px}
+.hist-btn{border:0;padding:6px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;transition:0.2s}
+.btn-share{background:rgba(0,240,255,0.15);color:var(--accent-cyan);border:1px solid rgba(0,240,255,0.3)}
+.btn-del{background:rgba(255,42,109,0.15);color:var(--accent-red);border:1px solid rgba(255,42,109,0.3)}
+
+/* Modal Window */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(6,9,17,0.85);backdrop-filter:blur(16px);display:none;justify-content:center;align-items:center;z-index:999;padding:16px}
+.modal{background:linear-gradient(145deg, #0f172a, #060911);border:1px solid var(--border-color);border-radius:28px;padding:24px;width:100%;max-width:440px;text-align:center;box-shadow:0 25px 60px rgba(0,0,0,0.8)}
+.modal-title{font-size:20px;font-weight:900;margin-bottom:8px;color:#fff}
+.modal-sub{font-size:13px;color:var(--text-muted);margin-bottom:20px}
+.modal-stats{background:rgba(255,255,255,0.03);border:1px solid var(--border-color);border-radius:18px;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;text-align:center}
+.modal-stat-val{font-size:22px;font-weight:900;color:var(--accent-green)}
+.modal-stat-lbl{font-size:10px;color:var(--text-muted);font-weight:700}
+.modal-actions{display:flex;flex-direction:column;gap:10px}
+.btn-m{width:100%;padding:14px;border-radius:30px;border:0;font-size:14px;font-weight:800;cursor:pointer}
+.btn-m-save{background:linear-gradient(135deg,var(--accent-green),#059669);color:#022c22}
+.btn-m-share{background:linear-gradient(135deg,var(--accent-cyan),#0284c7);color:#082f49}
+.btn-m-discard{background:transparent;color:var(--accent-red);border:1px solid rgba(255,42,109,0.3)}
 
 @media(max-width:600px){
   .grid{grid-template-columns:repeat(2,1fr)}
@@ -89,7 +106,7 @@ canvas#telemetryChart{width:100%;height:110px;display:block}
 
 <div class="app">
   <header>
-    <div class="logo">RUN<span>TRACK</span> <span class="badge">30cm PRO</span></div>
+    <div class="logo">RUN<span>TRACK</span> <span class="badge">15cm ULTRA</span></div>
     <div class="gps-pill">
       <div id="gpsDot" class="dot"></div>
       <span id="gpsText">تحديد الموقع...</span>
@@ -98,7 +115,7 @@ canvas#telemetryChart{width:100%;height:110px;display:block}
 
   <!-- Main Telemetry Display -->
   <section class="hero">
-    <div id="state" class="state">جاهز للركض السريع (تحديث كل 30 سم)</div>
+    <div id="state" class="state">جاهز لانطلاق الصاروخ (تحديث 15 سم | وتيرة حتى 1:30)</div>
     <div id="time" class="time">00:00:00</div>
     <div class="dist-container">
       <div id="distance" class="dist">0.000</div>
@@ -109,7 +126,7 @@ canvas#telemetryChart{width:100%;height:110px;display:block}
     <div class="actions">
       <button id="startBtn" class="btn btn-start" onclick="startRun()">▶ بدء التمرين</button>
       <button id="pauseBtn" class="btn btn-pause" onclick="togglePause()">Ⅱ إيقاف</button>
-      <button id="finishBtn" class="btn btn-finish" onclick="finishRun()">■ إنهاء التدقيق والحفظ</button>
+      <button id="finishBtn" class="btn btn-finish" onclick="finishRun()">■ إنهاء التمرين</button>
     </div>
   </section>
 
@@ -122,7 +139,7 @@ canvas#telemetryChart{width:100%;height:110px;display:block}
     <div class="card"><div class="label">دقة الـ GPS</div><div id="accuracy" class="val">--</div><div class="unit">أمتار</div></div>
     <div class="card"><div class="label">السعرات الحرارية</div><div id="calories" class="val">0</div><div class="unit">دورة حرارية</div></div>
     <div class="card"><div class="label">الوتيرة الحالية</div><div id="currentPace" class="val">--:--</div><div class="unit">دقيقة/كم</div></div>
-    <div class="card"><div class="label">معدل التحديث</div><div id="refreshRate" class="val">30cm</div><div class="unit">استجابة فائقة</div></div>
+    <div class="card"><div class="label">حساسية المسافة</div><div id="refreshRate" class="val">15cm</div><div class="unit">استجابة فورية</div></div>
   </section>
 
   <!-- Interactive Leaflet Map -->
@@ -132,7 +149,7 @@ canvas#telemetryChart{width:100%;height:110px;display:block}
   <section class="panel">
     <div class="panelhead">
       <span>📊 الرسم البياني اللحظي (الوتيرة ومعدل الخطوات)</span>
-      <span style="color:var(--accent-cyan);font-size:10px">تحديث فائق السرعة</span>
+      <span style="color:var(--accent-cyan);font-size:10px">تحديث حي فائق السرعة</span>
     </div>
     <canvas id="telemetryChart"></canvas>
   </section>
@@ -155,18 +172,49 @@ canvas#telemetryChart{width:100%;height:110px;display:block}
     </table>
   </section>
 
-  <!-- History & GPX Exporter -->
+  <!-- History Panel -->
   <section class="panel">
-    <div class="panelhead"><span>🏆 سجل الركضات وتصدير GPX</span></div>
+    <div class="panelhead"><span>🏆 سجل التمارين المسجلة</span></div>
     <div id="history"><div style="color:var(--text-muted);font-size:12px;text-align:center">لا يوجد تمارين مسجلة بعد.</div></div>
   </section>
+</div>
+
+<!-- Modal Dialog -->
+<div id="finishModal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">🏁 اكتمل التمرين وتم التدقيق!</div>
+    <div class="modal-sub">هل تريد حفظ هذا التمرين في السجل أو مشاركته؟</div>
+    <div class="modal-stats">
+      <div>
+        <div id="mDist" class="modal-stat-val">0.000</div>
+        <div class="modal-stat-lbl">المسافة (كم)</div>
+      </div>
+      <div>
+        <div id="mSpeed" class="modal-stat-val">0.0</div>
+        <div class="modal-stat-lbl">السرعة المتوسطة (كم/س)</div>
+      </div>
+      <div>
+        <div id="mPace" class="modal-stat-val">--:--</div>
+        <div class="modal-stat-lbl">متوسط الوتيرة</div>
+      </div>
+      <div>
+        <div id="mTime" class="modal-stat-val">00:00</div>
+        <div class="modal-stat-lbl">الوقت الإجمالي</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-m btn-m-save" onclick="confirmSaveRun()">💾 حفظ الركضة في السجل</button>
+      <button class="btn-m btn-m-share" onclick="generateAndShareCard()">🎨 مشاركة بطاقة الإنجاز الاحترافية</button>
+      <button class="btn-m btn-m-discard" onclick="discardRun()">🗑️ إلغاء وحذف التمرين</button>
+    </div>
+  </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 // --- Adaptive High-Precision 2D Kalman Filter ---
 class CentimeterKalmanFilter {
-  constructor(processNoise = 0.8) { // تم تقليل الضوضاء لاستجابة أسرع
+  constructor(processNoise = 0.3) { // استجابة فائقة للغاية لدعم 15 سم
     this.processNoise = processNoise;
     this.lat = null;
     this.lng = null;
@@ -189,20 +237,21 @@ class CentimeterKalmanFilter {
 }
 
 // --- Application Core State ---
-const kalman = new CentimeterKalmanFilter(0.8);
+const kalman = new CentimeterKalmanFilter(0.3);
 let running = false, paused = false, watchId = null, timer = null;
 let startTime = 0, pausedTotal = 0, pauseAt = 0;
-let lastPoint = null, rawLastPoint = null, totalMeters = 0, lapMeters = 0;
+let lastPoint = null, totalMeters = 0, lapMeters = 0;
 let route = [], line = null, marker = null;
 let paceHistory = [], cadenceHistory = [];
 let stepCount = 0, lastStepTime = Date.now(), currentCadence = 0;
 let laps = [], currentLapNumber = 1, lapStartTime = 0;
+let pendingRunData = null;
 
 // Leaflet Map Initialization
 const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([31.7683, 35.2137], 17);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-// --- Motion & Cadence Sensor Processing ---
+// --- Motion & Cadence Sensor Processing (Up to 300 SPM) ---
 if (window.DeviceMotionEvent) {
   let lastMag = 0;
   window.addEventListener('devicemotion', (e) => {
@@ -210,11 +259,11 @@ if (window.DeviceMotionEvent) {
     const acc = e.accelerationIncludingGravity;
     if (acc) {
       const mag = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
-      if (mag - lastMag > 2.2) { // حساس أسرع لاستجابة الجري السريع
+      if (mag - lastMag > 2.0) { // حساسية خطوات مرتفعة للركض السريع
         stepCount++;
         const now = Date.now();
         const deltaSec = (now - lastStepTime) / 1000;
-        if (deltaSec > 0.15 && deltaSec < 1.8) {
+        if (deltaSec > 0.10 && deltaSec < 1.8) { // دعم حتى 300 خطوة/دقيقة
           currentCadence = Math.round(60 / deltaSec);
         }
         lastStepTime = now;
@@ -234,18 +283,17 @@ function startRun() {
     startTime = Date.now();
     lapStartTime = startTime;
     
-    // تتبع عالي السرعة وبدون كاش
     watchId = navigator.geolocation.watchPosition(processGPS, gpsError, {
       enableHighAccuracy: true,
       maximumAge: 0,
-      timeout: 3000
+      timeout: 2000
     });
     
-    timer = setInterval(tick, 100); // تحديث العداد 10 مرات في الثانية
+    timer = setInterval(tick, 50); // تحديث العداد 20 مرة في الثانية
     document.getElementById('startBtn').style.display = 'none';
     document.getElementById('pauseBtn').style.display = 'inline-block';
     document.getElementById('finishBtn').style.display = 'inline-block';
-    document.getElementById('state').innerText = 'تتبع نشط (تحديث كل 30 سم - دعم وتيرة 2:30)';
+    document.getElementById('state').innerText = 'تتبع نشط (دقة 15 سم | دعم وتيرة 1:30/كم)';
   }, gpsError, { enableHighAccuracy: true });
 }
 
@@ -254,10 +302,7 @@ function processGPS(p) {
   const c = p.coords, accuracy = c.accuracy || 15, now = p.timestamp || Date.now();
   updateGPSUI(accuracy);
 
-  // حفظ آخر نقطة خام للتدقيق النهائى
-  rawLastPoint = { lat: c.latitude, lng: c.longitude, accuracy, time: now };
-
-  if (accuracy > 40) return;
+  if (accuracy > 45) return;
 
   const filtered = kalman.process(c.latitude, c.longitude, accuracy);
   const lat = filtered.lat, lng = filtered.lng;
@@ -268,15 +313,15 @@ function processGPS(p) {
     return;
   }
 
-  const dt = Math.max(0.1, (now - lastPoint.time) / 1000);
+  const dt = Math.max(0.05, (now - lastPoint.time) / 1000);
   const dMeters = highPrecisionDistance(lastPoint.lat, lastPoint.lng, lat, lng);
   const speedKmh = (c.speed && c.speed >= 0) ? c.speed * 3.6 : (dMeters / dt) * 3.6;
 
-  // رفع حد السرعة المسموح لتغطية السبرينت والركض الفائق (حتى 32 كم/ساعة)
-  if (speedKmh > 32) return;
+  // رفع حد السرعة المسموح إلى 50 كم/س لدعم وتيرة 1:30 دقيقة/كم (40 كم/س)
+  if (speedKmh > 50) return;
 
-  // *** تحديث كل 30 سنتيمتر (0.30 متر) ***
-  if (dMeters >= 0.30) {
+  // *** تحديث كل 15 سنتيمتر (0.15 متر) ***
+  if (dMeters >= 0.15) {
     totalMeters += dMeters;
     lapMeters += dMeters;
     lastPoint = { lat, lng, time: now, alt: c.altitude || 0 };
@@ -286,7 +331,6 @@ function processGPS(p) {
   }
 }
 
-// حساب مسافي جيوديسي دقيق جداً
 function highPrecisionDistance(lat1, lon1, lat2, lon2) {
   const R = 6371008.8;
   const dLat = (lat2 - lat1) * Math.PI / 180;
@@ -318,7 +362,6 @@ function updateMetrics(speedKmh) {
   }
 }
 
-// Auto Lap Splitter
 function checkAutoLap() {
   if (lapMeters >= 1000) {
     const lapTime = (Date.now() - lapStartTime) / 1000;
@@ -341,7 +384,6 @@ function renderLaps() {
     </tr>`).join('');
 }
 
-// Draw Telemetry
 function drawTelemetryChart() {
   const canvas = document.getElementById('telemetryChart');
   const ctx = canvas.getContext('2d');
@@ -396,23 +438,21 @@ function togglePause() {
   }
 }
 
-// *** محرك التدقيق النهائي واستخراج السنتمترات قبل الحفظ (Final Audit Engine) ***
+// *** التدقيق النهائي وعرض نافذة الحفظ/المشاركة ***
 function finishRun() {
   if (!running) return;
-  document.getElementById('state').innerText = 'جاري تدقيق وحساب كل السنتمترات...';
+  document.getElementById('state').innerText = 'جاري تدقيق المسافة حتى آخر 15 سم...';
 
-  // طلب موقع فوري أخير للتأكد من حساب المسافة حتى نقطة الوقوف الكاملة
   navigator.geolocation.getCurrentPosition(finalPosition => {
-    auditAndSave(finalPosition.coords);
+    auditAndPrepareModal(finalPosition.coords);
   }, () => {
-    auditAndSave(null); // الحفظ مباشرة إذا تعذر جلب نقطة توقف أخيرة
+    auditAndPrepareModal(null);
   }, { enableHighAccuracy: true, timeout: 1500 });
 }
 
-function auditAndSave(finalCoords) {
+function auditAndPrepareModal(finalCoords) {
   if (finalCoords && lastPoint) {
     const extraDist = highPrecisionDistance(lastPoint.lat, lastPoint.lng, finalCoords.latitude, finalCoords.longitude);
-    // إضافة المسافة المتبقية مهما كانت صغيرة (حتى لو كانت 10 سم)
     if (extraDist > 0.05 && extraDist < 50) {
       totalMeters += extraDist;
       drawMap(finalCoords.latitude, finalCoords.longitude);
@@ -425,45 +465,175 @@ function auditAndSave(finalCoords) {
 
   const elapsed = getElapsedSec();
   const km = totalMeters / 1000;
-  
-  // تحديث واجهة المستخدم النهائية بالمسافة المدققة
-  document.getElementById('distance').innerText = km.toFixed(3);
-  document.getElementById('subMeter').innerText = `المسافة النهائية المدققة: ${totalMeters.toFixed(2)} متر`;
+  const avgSpeedKmh = elapsed > 0 ? (km / (elapsed / 3600)) : 0;
+  const avgPaceSec = km > 0 ? elapsed / km : 0;
 
-  const runData = {
+  pendingRunData = {
     id: Date.now(),
     date: new Date().toLocaleDateString('ar-EG'),
     dist: km,
     totalMeters: totalMeters,
     time: elapsed,
-    pace: km > 0 ? elapsed / km : 0,
+    speed: avgSpeedKmh,
+    pace: avgPaceSec,
+    calories: Math.round(km * 65),
     route: route
   };
-  
-  saveRun(runData);
-  document.getElementById('state').innerText = 'تم تدقيق المسافة بنجاح وحفظ التمرين!';
+
+  // تعبئة بيانات النافذة المنبثقة
+  document.getElementById('mDist').innerText = km.toFixed(3);
+  document.getElementById('mSpeed').innerText = avgSpeedKmh.toFixed(1);
+  document.getElementById('mPace').innerText = formatPace(avgPaceSec);
+  document.getElementById('mTime').innerText = formatTime(elapsed);
+
+  // إظهار النافذة
+  document.getElementById('finishModal').style.display = 'flex';
+}
+
+function confirmSaveRun() {
+  if (pendingRunData) {
+    saveRun(pendingRunData);
+    loadHistory();
+  }
+  closeModal();
+  resetRunUI();
+}
+
+function discardRun() {
+  pendingRunData = null;
+  closeModal();
+  resetRunUI();
+}
+
+function closeModal() {
+  document.getElementById('finishModal').style.display = 'none';
+}
+
+function resetRunUI() {
+  document.getElementById('state').innerText = 'جاهز للانطلاق!';
   document.getElementById('startBtn').style.display = 'inline-block';
   document.getElementById('pauseBtn').style.display = 'none';
   document.getElementById('finishBtn').style.display = 'none';
+}
+
+// *** مولد بطاقات المشاركة الاحترافية (Professional Graphic Share Card Generator) ***
+function generateAndShareCard(customData = null) {
+  const data = customData || pendingRunData;
+  if (!data) return alert('لا تتوفر بيانات للركضة.');
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 1080;
+  canvas.height = 1350;
+  const ctx = canvas.getContext('2d');
+
+  // Background Gradient
+  const grad = ctx.createLinearGradient(0, 0, 1080, 1350);
+  grad.addColorStop(0, '#060911');
+  grad.addColorStop(0.5, '#0f172a');
+  grad.addColorStop(1, '#020617');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, 1080, 1350);
+
+  // Accent Glows
+  ctx.fillStyle = 'rgba(0, 255, 142, 0.08)';
+  ctx.beginPath(); ctx.arc(900, 200, 450, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = 'rgba(0, 240, 255, 0.08)';
+  ctx.beginPath(); ctx.arc(180, 1100, 400, 0, Math.PI * 2); ctx.fill();
+
+  // Outer Border Frame
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+  ctx.lineWidth = 12;
+  ctx.strokeRect(40, 40, 1000, 1270);
+
+  // Header Logo
+  ctx.font = '900 52px system-ui, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'right';
+  ctx.fillText('RUN', 980, 130);
+  ctx.fillStyle = '#00ff8e';
+  ctx.fillText('TRACK', 860, 130);
+  ctx.font = '700 24px system-ui, sans-serif';
+  ctx.fillStyle = '#64748b';
+  ctx.fillText(data.date, 980, 180);
+
+  // Main Metric: Distance
+  ctx.textAlign = 'center';
+  ctx.font = '900 180px system-ui, sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.fillText(data.dist.toFixed(3), 540, 450);
+  ctx.font = '800 36px system-ui, sans-serif';
+  ctx.fillStyle = '#00ff8e';
+  ctx.fillText('كيلومتر (أحكمت بدقة 15 سم)', 540, 520);
+
+  // Divider Line
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+  ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(120, 580); ctx.lineTo(960, 580); ctx.stroke();
+
+  // Metrics Grid
+  // Box 1: Avg Speed
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+  ctx.roundRect ? ctx.roundRect(120, 630, 390, 200, 24) : ctx.fillRect(120, 630, 390, 200);
+  ctx.fill();
+  ctx.font = '900 64px system-ui, sans-serif'; ctx.fillStyle = '#00f0ff'; ctx.fillText(data.speed.toFixed(1), 315, 730);
+  ctx.font = '700 24px system-ui, sans-serif'; ctx.fillStyle = '#94a3b8'; ctx.fillText('السرعة المتوسطة (كم/س)', 315, 785);
+
+  // Box 2: Pace
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+  ctx.roundRect ? ctx.roundRect(570, 630, 390, 200, 24) : ctx.fillRect(570, 630, 390, 200);
+  ctx.fill();
+  ctx.font = '900 64px system-ui, sans-serif'; ctx.fillStyle = '#00ff8e'; ctx.fillText(formatPace(data.pace), 765, 730);
+  ctx.font = '700 24px system-ui, sans-serif'; ctx.fillStyle = '#94a3b8'; ctx.fillText('متوسط الوتيرة (/كم)', 765, 785);
+
+  // Box 3: Time
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+  ctx.roundRect ? ctx.roundRect(120, 870, 390, 200, 24) : ctx.fillRect(120, 870, 390, 200);
+  ctx.fill();
+  ctx.font = '900 56px system-ui, sans-serif'; ctx.fillStyle = '#ffffff'; ctx.fillText(formatTime(data.time), 315, 970);
+  ctx.font = '700 24px system-ui, sans-serif'; ctx.fillStyle = '#94a3b8'; ctx.fillText('الزمن الإجمالي', 315, 1025);
+
+  // Box 4: Calories
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+  ctx.roundRect ? ctx.roundRect(570, 870, 390, 200, 24) : ctx.fillRect(570, 870, 390, 200);
+  ctx.fill();
+  ctx.font = '900 64px system-ui, sans-serif'; ctx.fillStyle = '#ffb703'; ctx.fillText(data.calories || Math.round(data.dist * 65), 765, 970);
+  ctx.font = '700 24px system-ui, sans-serif'; ctx.fillStyle = '#94a3b8'; ctx.fillText('السعرات الحرارية', 765, 1025);
+
+  // Footer Tagline
+  ctx.font = '800 26px system-ui, sans-serif';
+  ctx.fillStyle = '#64748b';
+  ctx.fillText('⚡ RUNTRACK V12 ULTRA • HIGH ACCURACY ENGINE', 540, 1220);
+
+  // Export & Share
+  canvas.toBlob(blob => {
+    const file = new File([blob], `runtrack_${data.id}.png`, { type: 'image/png' });
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        title: 'إنجاز ركض جديد - RUNTRACK',
+        text: `قطعـت مسافـة ${data.dist.toFixed(3)} كم بمتوسط سرعة ${data.speed.toFixed(1)} كم/ساعة! 🏃‍♂️💨`,
+        files: [file]
+      }).catch(() => {});
+    } else {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `runtrack_${data.id}.png`;
+      a.click();
+    }
+  });
+}
+
+function deleteRun(id) {
+  if (!confirm('هل أنت تأكد من حذف هذه الركضة من السجل؟')) return;
+  let h = JSON.parse(localStorage.getItem('runtrack_v12_30cm') || '[]');
+  h = h.filter(x => x.id !== id);
+  localStorage.setItem('runtrack_v12_30cm', JSON.stringify(h));
   loadHistory();
 }
 
-function exportGPX(id) {
+function shareHistoryRun(id) {
   let h = JSON.parse(localStorage.getItem('runtrack_v12_30cm') || '[]');
-  const run = h.find(x => x.id === id);
-  if (!run || !run.route || !run.route.length) return alert('لا تتوفر إحداثيات لهذا التمرين.');
-
-  let gpx = `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="RunTrack 30cm Pro">\n<trk><name>Run ${run.date}</name><trkseg>\n`;
-  run.route.forEach(pt => {
-    gpx += `  <trkpt lat="${pt.lat}" lon="${pt.lng}"><time>${pt.time}</time></trkpt>\n`;
-  });
-  gpx += `</trkseg></trk>\n</gpx>`;
-
-  const blob = new Blob([gpx], { type: 'application/gpx+xml' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `runtrack_${run.id}.gpx`;
-  a.click();
+  const item = h.find(x => x.id === id);
+  if (item) generateAndShareCard(item);
 }
 
 function getElapsedSec() {
@@ -484,7 +654,7 @@ function formatPace(s) {
 function updateGPSUI(acc) {
   document.getElementById('accuracy').innerText = Math.round(acc);
   const dot = document.getElementById('gpsDot'), txt = document.getElementById('gpsText');
-  if (acc <= 8) { dot.className = 'dot good'; txt.innerText = 'دقة فائقة (HD)'; }
+  if (acc <= 8) { dot.className = 'dot good'; txt.innerText = 'دقة فائقة جداً (HD)'; }
   else if (acc <= 20) { dot.className = 'dot warn'; txt.innerText = 'إشارة جيدة'; }
   else { dot.className = 'dot bad'; txt.innerText = 'إشارة ضعيفة'; }
 }
@@ -492,7 +662,7 @@ function updateGPSUI(acc) {
 function gpsError() { document.getElementById('gpsText').innerText = 'خطأ GPS'; }
 
 function resetRun() {
-  totalMeters = 0; lapMeters = 0; lastPoint = null; rawLastPoint = null; route = []; paceHistory = []; cadenceHistory = []; stepCount = 0; laps = []; currentLapNumber = 1;
+  totalMeters = 0; lapMeters = 0; lastPoint = null; route = []; paceHistory = []; cadenceHistory = []; stepCount = 0; laps = []; currentLapNumber = 1;
   if (line) map.removeLayer(line); line = null;
   if (marker) map.removeLayer(marker); marker = null;
   document.getElementById('distance').innerText = '0.000';
@@ -519,9 +689,12 @@ function loadHistory() {
     <div class="history-item">
       <div>
         <div style="font-weight:800;color:#fff">${x.dist.toFixed(3)} كم (${(x.totalMeters || (x.dist*1000)).toFixed(1)}m) · ${formatTime(x.time)}</div>
-        <div style="font-size:10px;color:var(--text-muted)">${x.date} · وتيرة ${formatPace(x.pace)}/كم</div>
+        <div style="font-size:10px;color:var(--text-muted)">${x.date} · وتيرة ${formatPace(x.pace)}/كم · سرعة ${(x.speed || 0).toFixed(1)} كم/س</div>
       </div>
-      <button class="gpx-btn" onclick="exportGPX(${x.id})">📥 GPX</button>
+      <div class="hist-btns">
+        <button class="hist-btn btn-share" onclick="shareHistoryRun(${x.id})">🎨 مشاركة</button>
+        <button class="hist-btn btn-del" onclick="deleteRun(${x.id})">🗑️ حذف</button>
+      </div>
     </div>`).join('');
 }
 loadHistory();
