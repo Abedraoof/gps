@@ -1,359 +1,405 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-        <meta name="google-site-verification" content="4j5ULNTNE2ixVPpcLIiCN8Q4c06Ce2WU94GCSvMtyeU" />
-
+                <meta name="google-site-verification" content="4j5ULNTNE2ixVPpcLIiCN8Q4c06Ce2WU94GCSvMtyeU" />
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#070a0f">
-<title>RUNTRACK V5</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#080c14">
+<title>RUNTRACK PRO V6</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{margin:0;background:#070a0f;color:#f5f7fa;font-family:Inter,Arial,sans-serif}
-.app{max-width:1000px;margin:auto;padding:12px}
-header{height:58px;display:flex;align-items:center;justify-content:space-between}
-.logo{font-size:21px;font-weight:950;letter-spacing:-.5px}.logo i{color:#47f29b;font-style:normal}
-.gps{font-size:10px;font-weight:900;display:flex;gap:7px;align-items:center}.dot{width:9px;height:9px;border-radius:50%;background:#606b78}.good{background:#47f29b;box-shadow:0 0 12px #47f29b}.warn{background:#ffc857}.bad{background:#ff5261}
-.hero{background:linear-gradient(145deg,#17212c,#0d131a);border:1px solid #273340;border-radius:28px;padding:22px 16px;text-align:center}
-.state{font-size:10px;color:#8190a0;font-weight:950;letter-spacing:2px}
-.time{font-size:50px;font-weight:950;letter-spacing:-3px;margin-top:6px}
-.dist{font-size:72px;line-height:1;font-weight:950;letter-spacing:-4px;margin-top:4px}.dist small{font-size:15px;color:#748090;letter-spacing:0}
-.pace{margin-top:12px;color:#84909e;font-size:11px}.pace b{font-size:26px;color:#47f29b}
-.actions{display:flex;justify-content:center;gap:8px;margin-top:20px;flex-wrap:wrap}
-button{border:0;border-radius:50px;padding:14px 23px;font-weight:950;cursor:pointer}
-.start{background:#47f29b;color:#06100a}.pause{background:#29333e;color:#fff;display:none}.finish{background:#f05260;color:#fff;display:none}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:9px}
-.card{background:#111820;border:1px solid #202b36;border-radius:17px;padding:14px}.label{font-size:9px;color:#718092;font-weight:950;letter-spacing:1px}.val{font-size:23px;font-weight:950;margin-top:6px}.unit{font-size:8px;color:#687586;margin-top:2px}
-.panel{background:#111820;border:1px solid #202b36;border-radius:20px;padding:15px;margin-top:9px}
-.panelhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:950}
-.targetrow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:11px}
-select,input{width:100%;background:#0b1016;color:#fff;border:1px solid #293541;border-radius:11px;padding:10px;font-weight:800}
-.targetInfo{margin-top:10px;color:#8a96a5;font-size:11px;line-height:1.6}
-#map{height:410px;border-radius:22px;overflow:hidden;border:1px solid #202b36;margin-top:9px}
-.mapgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.mini{background:#111820;border:1px solid #202b36;border-radius:15px;text-align:center;padding:12px}.mini b{display:block;font-size:15px}.mini span{font-size:8px;color:#718092}
-.progress{height:8px;background:#28313b;border-radius:20px;overflow:hidden;margin-top:10px}.bar{height:100%;width:0;background:#47f29b}
-.ghost{font-size:11px;color:#a7b1bd;margin-top:10px}.ghost b{color:#47f29b}
-.metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
-.metric{background:#0b1016;border-radius:14px;padding:13px}.metric b{font-size:20px}.metric small{display:block;color:#6e7a89;margin-top:3px}
-.segment{display:grid;grid-template-columns:55px 1fr 1fr 1fr;padding:11px 0;border-bottom:1px solid #202933;font-size:10px}.right{text-align:right}.center{text-align:center}
-.chart{height:110px;display:flex;align-items:end;gap:2px;margin-top:12px}.barp{flex:1;background:#47f29b;min-height:2px;border-radius:3px 3px 0 0;opacity:.8}
-.historyitem{display:grid;grid-template-columns:1fr 1fr 1fr;padding:10px 0;border-bottom:1px solid #202933;font-size:10px}
-.overlay{display:none;position:fixed;inset:0;background:rgba(4,6,9,.95);z-index:9999;align-items:center;justify-content:center;text-align:center}.box{width:min(90%,390px);background:#111820;border:1px solid #2b3744;border-radius:25px;padding:30px}.loader{width:40px;height:40px;border:4px solid #29333d;border-top-color:#47f29b;border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 18px}@keyframes spin{to{transform:rotate(360deg)}}
-@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}.dist{font-size:62px}.time{font-size:43px}}
+:root {
+  --bg-dark: #080c14;
+  --card-bg: #101726;
+  --card-border: #1e293b;
+  --accent-green: #10b981;
+  --accent-glow: rgba(16, 185, 129, 0.25);
+  --accent-warn: #f59e0b;
+  --accent-danger: #ef4444;
+  --text-main: #f8fafc;
+  --text-muted: #64748b;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+body{background:var(--bg-dark);color:var(--text-main);font-family:system-ui,-apple-system,sans-serif;padding:12px;direction:rtl}
+.app{max-width:850px;margin:auto;display:flex;flex-direction:column;gap:10px}
+
+header{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 6px}
+.logo{font-size:20px;font-weight:900;letter-spacing:-0.5px;display:flex;align-items:center;gap:6px}
+.logo span{color:var(--accent-green)}
+.gps-pill{font-size:11px;font-weight:700;display:flex;align-items:center;gap:8px;background:#131c2e;padding:6px 12px;border-radius:20px;border:1px solid var(--card-border)}
+.dot{width:8px;height:8px;border-radius:50%;background:#475569;transition:all 0.3s}
+.dot.good{background:var(--accent-green);box-shadow:0 0 10px var(--accent-green)}
+.dot.warn{background:var(--accent-warn)}
+.dot.bad{background:var(--accent-danger)}
+
+.hero{background:linear-gradient(160deg,#131d30,#0b121e);border:1px solid var(--card-border);border-radius:24px;padding:20px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 60%);pointer-events:none}
+.state{font-size:11px;color:var(--text-muted);font-weight:800;letter-spacing:1px}
+.time{font-size:48px;font-weight:900;letter-spacing:-1px;margin:4px 0;font-variant-numeric:tabular-nums}
+.dist{font-size:68px;line-height:1;font-weight:900;letter-spacing:-2px;color:#fff}
+.dist small{font-size:16px;color:var(--text-muted);margin-right:4px}
+.pace-box{margin-top:10px;font-size:12px;color:var(--text-muted)}
+.pace-box b{font-size:24px;color:var(--accent-green);margin-left:4px}
+
+.actions{display:flex;justify-content:center;gap:10px;margin-top:16px}
+.btn{border:0;border-radius:40px;padding:12px 28px;font-size:14px;font-weight:800;cursor:pointer;transition:transform 0.1s,opacity 0.2s}
+.btn:active{transform:scale(0.96)}
+.btn-start{background:var(--accent-green);color:#022c22;box-shadow:0 4px 15px var(--accent-glow)}
+.btn-pause{background:#1e293b;color:#fff;display:none}
+.btn-finish{background:var(--accent-danger);color:#fff;display:none}
+
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:12px;text-align:center}
+.card .label{font-size:10px;color:var(--text-muted);font-weight:800}
+.card .val{font-size:20px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums}
+.card .unit{font-size:9px;color:var(--text-muted)}
+
+.panel{background:var(--card-bg);border:1px solid var(--card-border);border-radius:18px;padding:14px}
+.panelhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;margin-bottom:10px}
+
+#map{height:320px;border-radius:18px;overflow:hidden;border:1px solid var(--card-border)}
+.leaflet-tile{filter:brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7)}
+
+.progress-bar{height:8px;background:#1e293b;border-radius:10px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;width:0%;background:var(--accent-green);transition:width 0.2s}
+
+canvas#paceChart{width:100%;height:80px;display:block}
+
+.history-item{display:grid;grid-template-columns:1fr 1fr 1fr;padding:10px 0;border-bottom:1px solid var(--card-border);font-size:11px}
+
+@media(max-width:600px){
+  .grid{grid-template-columns:repeat(2,1fr)}
+  .dist{font-size:56px}
+  .time{font-size:40px}
+}
 </style>
 </head>
 <body>
+
 <div class="app">
-<header><div class="logo">RUN<i>TRACK</i> <small style="color:#718092">V5</small></div><div class="gps"><span id="gpsDot" class="dot"></span><span id="gpsText">GPS OFF</span></div></header>
+  <header>
+    <div class="logo">RUN<span>TRACK</span> <small style="font-size:10px;color:var(--text-muted)">PRO V6</small></div>
+    <div class="gps-pill">
+      <div id="gpsDot" class="dot"></div>
+      <span id="gpsText">في انتظار الموقع</span>
+    </div>
+  </header>
 
-<section class="hero">
-<div id="state" class="state">READY</div>
-<div id="time" class="time">00:00:00</div>
-<div class="dist"><span id="distance">0.000</span> <small>KM</small></div>
-<div class="pace">CURRENT PACE <b id="currentPace">--:--</b> /KM</div>
-<div class="actions">
-<button id="start" class="start" onclick="startRun()">▶ START</button>
-<button id="pause" class="pause" onclick="togglePause()">Ⅱ PAUSE</button>
-<button id="finish" class="finish" onclick="finishRun()">■ FINISH</button>
+  <section class="hero">
+    <div id="state" class="state">جاهز للبدء</div>
+    <div id="time" class="time">00:00:00</div>
+    <div class="dist"><span id="distance">0.000</span><small>كم</small></div>
+    <div class="pace-box">السرعة الحالية: <b id="currentPace">--:--</b> /كم</div>
+    <div class="actions">
+      <button id="startBtn" class="btn btn-start" onclick="startRun()">▶ بدء التمرين</button>
+      <button id="pauseBtn" class="btn btn-pause" onclick="togglePause()">Ⅱ إيقاف مؤقت</button>
+      <button id="finishBtn" class="btn btn-finish" onclick="finishRun()">■ إنهاء</button>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card"><div class="label">السرعة</div><div id="speed" class="val">0.0</div><div class="unit">كم/ساعة</div></div>
+    <div class="card"><div class="label">معدل الوتيرة</div><div id="avgPace" class="val">--:--</div><div class="unit">دقيقة/كم</div></div>
+    <div class="card"><div class="label">دقة الـ GPS</div><div id="accuracy" class="val">--</div><div class="unit">أمتار</div></div>
+    <div class="card"><div class="label">الخطوات المقدرة</div><div id="steps" class="val">0</div><div class="unit">خطوة</div></div>
+  </section>
+
+  <div id="map"></div>
+
+  <section class="panel">
+    <div class="panelhead">
+      <span>🎯 المقطع الحالي (400m)</span>
+      <span id="remaining" style="color:var(--accent-green)">400m</span>
+    </div>
+    <div class="progress-bar"><div id="bar" class="progress-fill"></div></div>
+  </section>
+
+  <section class="panel">
+    <div class="panelhead"><span>📊 المخطط اللحظي للوتيرة</span></div>
+    <canvas id="paceChart"></canvas>
+  </section>
+
+  <section class="panel">
+    <div class="panelhead"><span>🏆 السجل الأخير</span></div>
+    <div id="history"><div style="color:var(--text-muted);font-size:12px;text-align:center">لا يوجد تمارين مسجلة بعد.</div></div>
+  </section>
 </div>
-</section>
-
-<section class="grid">
-<div class="card"><div class="label">SPEED</div><div id="speed" class="val">0.0</div><div class="unit">KM/H</div></div>
-<div class="card"><div class="label">AVG PACE</div><div id="avgPace" class="val">--:--</div><div class="unit">MIN/KM</div></div>
-<div class="card"><div class="label">100M PACE</div><div id="pace100" class="val">--:--</div><div class="unit">MIN/100M</div></div>
-<div class="card"><div class="label">GPS ACCURACY</div><div id="accuracy" class="val">--</div><div class="unit">METERS</div></div>
-<div class="card"><div class="label">ALTITUDE</div><div id="altitude" class="val">--</div><div class="unit">METERS</div></div>
-<div class="card"><div class="label">RUN IQ</div><div id="runIQ" class="val">--</div><div class="unit">/100</div></div>
-<div class="card"><div class="label">UPDATES</div><div id="updates" class="val">0</div><div class="unit">GPS FIXES</div></div>
-<div class="card"><div class="label">EFFORT</div><div id="effort" class="val">--</div><div class="unit">/100</div></div>
-</section>
-
-<section class="panel">
-<div class="panelhead"><span>🎯 RACE MODE</span><span id="raceStatus" style="color:#47f29b">OFF</span></div>
-<div class="targetrow">
-<select id="raceDistance"><option value="1">1 KM</option><option value="5" selected>5 KM</option><option value="10">10 KM</option></select>
-<input id="raceTime" type="text" value="20:00" inputmode="numeric" placeholder="Target time">
-<button onclick="setRace()">SET</button>
-</div>
-<div id="raceInfo" class="targetInfo">Set a target to receive live projected finish and pace guidance.</div>
-</section>
-
-<div id="map"></div>
-
-<div class="mapgrid">
-<div class="mini"><b id="lat">--</b><span>LATITUDE</span></div>
-<div class="mini"><b id="lon">--</b><span>LONGITUDE</span></div>
-<div class="mini"><b id="gpsAge">--</b><span>GPS AGE</span></div>
-</div>
-
-<section class="panel">
-<div class="panelhead"><span>400M SPLIT</span><span id="remaining" style="color:#47f29b">400m</span></div>
-<div class="progress"><div id="bar" class="bar"></div></div>
-<div id="ghost" class="ghost">👻 Ghost: start a run to create your benchmark.</div>
-</section>
-
-<section class="panel">
-<div class="panelhead"><span>📊 LIVE PACE</span><span id="trend">--</span></div>
-<div id="chart" class="chart"></div>
-</section>
-
-<section class="panel">
-<div class="panelhead"><span>🏆 BEST SEGMENTS</span><span style="color:#718092">AUTO</span></div>
-<div id="segments"><div style="color:#697586;margin-top:10px">Segments appear during the run.</div></div>
-</section>
-
-<section class="panel">
-<div class="panelhead"><span>🧠 RUN INTELLIGENCE</span><span id="iqText" style="color:#47f29b">READY</span></div>
-<div class="metrics">
-<div class="metric"><b id="consistency">--</b><small>PACE CONSISTENCY</small></div>
-<div class="metric"><b id="finishStrength">--</b><small>FINISH STRENGTH</small></div>
-<div class="metric"><b id="projection">--</b><small>PROJECTED 5K</small></div>
-<div class="metric"><b id="distanceConfidence">--</b><small>DISTANCE CONFIDENCE</small></div>
-</div>
-</section>
-
-<section class="panel">
-<div class="panelhead"><span>🏃 LAST RUNS</span><span style="color:#718092">LOCAL</span></div>
-<div id="history"><div style="color:#697586;margin-top:10px">No saved runs yet.</div></div>
-</section>
-</div>
-
-<div id="overlay" class="overlay"><div class="box"><div class="loader"></div><h2>FINAL GPS SYNC</h2><p id="syncText" style="color:#7d8997">Collecting fresh GPS positions...</p></div></div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const CFG={
-  maxSpeed:45,
-  minMove:1,
-  lap:400,
-  speedSamples:7,
-  finalSamples:5,
-  finalTimeout:4500
-};
-
-let running=false,paused=false,finishing=false,watchId=null,timer=null;
-let startTime=0,pausedTotal=0,pauseAt=0;
-let last=null,total=0,lapDist=0,lapStart=0,updates=0;
-let route=[],line=null,marker=null,speeds=[],paceHistory=[],segments={};
-let race=null,previousBest=null;
-
-const map=L.map('map',{zoomControl:false}).setView([31.7683,35.2137],17);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:20,attribution:'© OpenStreetMap'}).addTo(map);
-
-function startRun(){
-  if(!navigator.geolocation)return alert('This device does not support GPS.');
-  navigator.geolocation.getCurrentPosition(p=>{
-    resetRun(); running=true; startTime=Date.now(); lapStart=startTime;
-    accept(p,true);
-    watchId=navigator.geolocation.watchPosition(processGPS,gpsError,{enableHighAccuracy:true,maximumAge:0,timeout:5000});
-    timer=setInterval(tick,100);
-    $('start').style.display='none';$('pause').style.display='inline-block';$('finish').style.display='inline-block';
-    $('state').innerText='RUNNING';setGPS('GPS LOCK','good');
-  },gpsError,{enableHighAccuracy:true,maximumAge:0,timeout:15000});
-}
-
-function processGPS(p){updates++;$('updates').innerText=updates;showGPS(p);if(!paused&&!finishing)accept(p,false);else if(paused)last=null;}
-
-function accept(p,force=false){
-  const c=p.coords,lat=c.latitude,lon=c.longitude,t=p.timestamp,acc=finite(c.accuracy)?c.accuracy:999;
-  showGPS(p);
-  if(!last){last={lat,lon,time:t,acc};draw(lat,lon);return}
-  const d=dist(last.lat,last.lon,lat,lon),dt=Math.max(.25,(t-last.time)/1000);
-  let sp=finite(c.speed)&&c.speed>=0?c.speed*3.6:d/dt*3.6;
-
-  // Accuracy is a confidence signal, never an automatic distance kill-switch.
-  // A point is rejected only when the movement is physically implausible.
-  if(!force && sp>CFG.maxSpeed){return}
-  if(!force && d<CFG.minMove){last.time=t;addSpeed(sp);updateUI();return}
-
-  const maxPlausible=(Math.max(8,Math.min(CFG.maxSpeed,Math.max(sp,12))/3.6)*dt)+Math.max(acc,10);
-  if(!force && d>maxPlausible){return}
-
-  total+=d;lapDist+=d;
-  last={lat,lon,time:t,acc};
-  addSpeed(sp);draw(lat,lon);updateUI();
-  while(lapDist>=CFG.lap)lap();
-}
-
-function addSpeed(s){
-  if(!finite(s)||s<0||s>CFG.maxSpeed)return;
-  speeds.push(s);if(speeds.length>CFG.speedSamples)speeds.shift();
-}
-
-function smoothSpeed(){
-  if(!speeds.length)return 0;
-  let a=0,w=0;for(let i=0;i<speeds.length;i++){let q=i+1;a+=speeds[i]*q;w+=q}return a/w;
-}
-
-function updateUI(){
-  const km=total/1000,elapsed=elapsedSec(),sp=smoothSpeed();
-  $('distance').innerText=km.toFixed(3);
-  $('speed').innerText=sp.toFixed(1);
-  if(km>0)$('avgPace').innerText=pace(elapsed/km);
-  if(sp>0){$('currentPace').innerText=pace(3600/sp);$('pace100').innerText=pace(360/sp)}
-  const pct=Math.min(100,lapDist/CFG.lap*100);$('bar').style.width=pct+'%';
-  $('remaining').innerText=Math.max(0,Math.round(CFG.lap-lapDist))+'m';
-  updateIntelligence(elapsed,km,sp);
-}
-
-function updateIntelligence(elapsed,km,sp){
-  if(sp>0){
-    const p=60/sp;
-    paceHistory.push(p);if(paceHistory.length>80)paceHistory.shift();
-    drawChart();
-    if(paceHistory.length>5){
-      const avg=mean(paceHistory),sd=std(paceHistory);
-      const consistency=Math.max(0,Math.min(100,100-(sd/avg)*1000));
-      $('consistency').innerText=Math.round(consistency);
-      $('effort').innerText=Math.round(Math.min(100,50+Math.abs(sp-10)*4));
-      $('trend').innerText=p<avg?'▲ FASTER':'▼ SLOWER';
+// --- خوارزمية مرشح كالمان لـ GPS ---
+class KalmanFilter2D {
+  constructor(processNoise = 3) {
+    this.processNoise = processNoise;
+    this.lat = null;
+    this.lng = null;
+    this.variance = -1;
+  }
+  process(lat, lng, accuracy, timestamp) {
+    if (this.variance < 0) {
+      this.lat = lat;
+      this.lng = lng;
+      this.variance = accuracy * accuracy;
+      return { lat, lng };
     }
-  }
-  const conf=distanceConfidence();
-  $('distanceConfidence').innerText=conf;
-  if(km>0){
-    const proj=elapsed/km*5;
-    $('projection').innerText=timeFmt(proj);
-  }
-  if(race&&km>0){
-    const projected=elapsed/km*race.distance;
-    const delta=race.target-projected;
-    $('raceInfo').innerHTML=`Required <b>${pace(race.target/race.distance)}</b>/km · Projected <b>${timeFmt(projected)}</b> · <span style="color:${delta>=0?'#47f29b':'#ff6572'}">${delta>=0?Math.round(delta)+' sec ahead':' '+Math.round(-delta)+' sec behind'}</span>`;
-  }
-  if(previousBest&&km>0){
-    const ghost=previousBest.distance-km;
-    $('ghost').innerHTML=ghost>0?`👻 Ghost: <b>${ghost.toFixed(2)} km</b> ahead of your last best run.`:`👻 You are <b>${Math.abs(ghost).toFixed(2)} km</b> ahead of your last best run.`;
+    this.variance += this.processNoise;
+    const k = this.variance / (this.variance + accuracy * accuracy);
+    this.lat += k * (lat - this.lat);
+    this.lng += k * (lng - this.lng);
+    this.variance = (1 - k) * this.variance;
+    return { lat: this.lat, lng: this.lng };
   }
 }
 
-function updateIntelligenceFinal(elapsed){
-  const km=total/1000;
-  const avg=mean(paceHistory),sd=std(paceHistory);
-  const consistency=Math.max(0,Math.min(100,100-(sd/(avg||1))*1000));
-  $('consistency').innerText=Math.round(consistency);
-  const finish=Math.min(100,Math.max(0,50+(paceHistory.length>10?(mean(paceHistory.slice(0,Math.floor(paceHistory.length/2)))-mean(paceHistory.slice(Math.floor(paceHistory.length/2))))*100:0)));
-  $('finishStrength').innerText=Math.round(finish);
-  const iq=Math.round((consistency+finish+distanceConfidence())/3);
-  $('runIQ').innerText=iq;$('iqText').innerText=iq>=85?'EXCELLENT':iq>=70?'STRONG':'KEEP BUILDING';
-}
+// --- الحالة العامة والتكوين ---
+const kalman = new KalmanFilter2D(2);
+let running = false, paused = false, watchId = null, timer = null;
+let startTime = 0, pausedTotal = 0, pauseAt = 0;
+let lastPoint = null, totalDistance = 0, residualDistance = 0, lapDist = 0;
+let route = [], line = null, marker = null;
+let paceHistory = [], stepCount = 0;
 
-function lap(){
-  const now=Date.now(),sec=(now-lapStart)/1000;
-  const obj={n:Object.keys(segments).length+1,time:sec,pace:sec/.4,speed:1440/sec};
-  segments['400m-'+obj.n]=obj;
-  lapDist-=CFG.lap;lapStart=now;renderSegments();
-  if(navigator.vibrate)navigator.vibrate([80,60,80]);
-  if('speechSynthesis'in window){speechSynthesis.cancel();let u=new SpeechSynthesisUtterance('Four hundred meters');u.rate=1.1;speechSynthesis.speak(u)}
-}
+const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([31.7683, 35.2137], 16);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
 
-function renderSegments(){
-  const vals=Object.values(segments);
-  $('segments').innerHTML=vals.length?vals.map(x=>`<div class="segment"><div class="green">400m</div><div class="center">${shortTime(x.time)}</div><div class="center">${pace(x.pace)}</div><div class="right">${x.speed.toFixed(1)} km/h</div></div>`).join(''):'<div style="color:#697586;margin-top:10px">Segments appear during the run.</div>';
-}
-
-function togglePause(){
-  if(!running||finishing)return;
-  if(!paused){paused=true;pauseAt=Date.now();$('pause').innerText='▶ RESUME';$('state').innerText='PAUSED'}
-  else{paused=false;pausedTotal+=Date.now()-pauseAt;pauseAt=0;last=null;speeds=[];$('pause').innerText='Ⅱ PAUSE';$('state').innerText='RUNNING'}
-}
-
-async function finishRun(){
-  if(!running||finishing)return;finishing=true;
-  $('overlay').style.display='flex';
-  if(watchId!==null){navigator.geolocation.clearWatch(watchId);watchId=null}
-  await finalSync();
-  running=false;clearInterval(timer);
-  const elapsed=elapsedSec(),km=total/1000,avgP=km?elapsed/km:0,avgS=km?km/(elapsed/3600):0;
-  updateIntelligenceFinal(elapsed);
-  saveRun({date:new Date().toLocaleString(),distance:km,time:elapsed,pace:avgP,speed:avgS});
-  $('overlay').style.display='none';$('state').innerText='FINISHED';
-  $('start').style.display='inline-block';$('pause').style.display='none';$('finish').style.display='none';
-  setGPS('GPS OFF','');loadHistory();finishing=false;
-  alert(`RUN COMPLETE\n\nDistance: ${km.toFixed(3)} km\nTime: ${timeFmt(elapsed)}\nPace: ${pace(avgP)} /km\nAverage speed: ${avgS.toFixed(1)} km/h`);
-}
-
-function finalSync(){
-  return new Promise(resolve=>{
-    let n=0,best=null,done=false;
-    const finish=()=>{if(done)return;done=true;if(best)accept(best,true);resolve()};
-    const id=navigator.geolocation.watchPosition(p=>{
-      n++;if(!best||p.coords.accuracy<best.coords.accuracy)best=p;
-      if(last)accept(p,true);
-      $('syncText').innerText=`Final GPS sync · ${n}/${CFG.finalSamples} fresh fixes`;
-      if(n>=CFG.finalSamples)finish();
-    },()=>{}, {enableHighAccuracy:true,maximumAge:0,timeout:1200});
-    setTimeout(()=>{navigator.geolocation.clearWatch(id);finish()},CFG.finalTimeout);
+// --- إدارة الحساسات والخطوات عند ضعف الـ GPS ---
+if (window.DeviceMotionEvent) {
+  window.addEventListener('devicemotion', (e) => {
+    if (!running || paused) return;
+    const acc = e.accelerationIncludingGravity;
+    if (acc) {
+      const mag = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
+      if (mag > 12.2) { stepCount++; document.getElementById('steps').innerText = stepCount; }
+    }
   });
 }
 
-function draw(lat,lon){
-  route.push([lat,lon]);
-  if(!marker)marker=L.circleMarker([lat,lon],{radius:8,color:'#fff',weight:3,fillColor:'#47f29b',fillOpacity:1}).addTo(map);else marker.setLatLng([lat,lon]);
-  if(!line)line=L.polyline(route,{color:'#47f29b',weight:5,opacity:.9}).addTo(map);else line.setLatLngs(route);
-  map.setView([lat,lon],18,{animate:false});
+function startRun() {
+  if (!navigator.geolocation) return alert('الـ GPS غير مدعوم في هذا الجهاز.');
+  navigator.geolocation.getCurrentPosition(p => {
+    resetRun();
+    running = true;
+    startTime = Date.now();
+    watchId = navigator.geolocation.watchPosition(processGPS, gpsError, {
+      enableHighAccuracy: true,
+      maximumAge: 1000,
+      timeout: 10000
+    });
+    timer = setInterval(tick, 200);
+    document.getElementById('startBtn').style.display = 'none';
+    document.getElementById('pauseBtn').style.display = 'inline-block';
+    document.getElementById('finishBtn').style.display = 'inline-block';
+    document.getElementById('state').innerText = 'جاري الجري...';
+  }, gpsError, { enableHighAccuracy: true });
 }
 
-function showGPS(p){
-  const c=p.coords;
-  $('accuracy').innerText=finite(c.accuracy)?Math.round(c.accuracy):'--';
-  $('altitude').innerText=finite(c.altitude)?Math.round(c.altitude):'--';
-  $('lat').innerText=c.latitude.toFixed(6);$('lon').innerText=c.longitude.toFixed(6);$('gpsAge').innerText='0s';
-  setGPS(c.accuracy<=30?'GPS EXCELLENT':c.accuracy<=70?'GPS GOOD':'GPS WEAK',c.accuracy<=70?'good':'warn');
+function processGPS(p) {
+  if (!running || paused) return;
+  const coords = p.coords;
+  const rawLat = coords.latitude, rawLng = coords.longitude;
+  const rawAcc = coords.accuracy || 30;
+  const now = p.timestamp || Date.now();
+
+  updateGPSUI(rawAcc);
+
+  // تصفية الإحداثيات باستخدام كالمان
+  const filtered = kalman.process(rawLat, rawLng, rawAcc, now);
+  const lat = filtered.lat, lng = filtered.lng;
+
+  if (!lastPoint) {
+    lastPoint = { lat, lng, time: now };
+    drawMap(lat, lng);
+    return;
+  }
+
+  const dt = Math.max(0.5, (now - lastPoint.time) / 1000);
+  const d = haversine(lastPoint.lat, lastPoint.lng, lat, lng);
+  const speedKmh = (d / dt) * 3.6;
+
+  // استبعاد النطزات غير المنطقية (أسرع من 45 كم/س)
+  if (speedKmh > 45) return;
+
+  // التراكم الدقيق للأمتار الممشية بدون إهمال الكسيرات الصغيرة
+  residualDistance += d;
+  if (residualDistance >= 0.5) { // تجميع الأمتار عند الوصول لـ 0.5 متر
+    totalDistance += residualDistance;
+    lapDist += residualDistance;
+    residualDistance = 0;
+  }
+
+  lastPoint = { lat, lng, time: now };
+  drawMap(lat, lng);
+  updateMetrics(speedKmh);
 }
 
-function distanceConfidence(){
-  const a=Number($('accuracy').innerText);
-  if(!finite(a))return 50;
-  return Math.round(Math.max(45,Math.min(100,100-a*.45)));
+function updateMetrics(speedKmh) {
+  const km = totalDistance / 1000;
+  const elapsed = getElapsedSec();
+
+  document.getElementById('distance').innerText = km.toFixed(3);
+  document.getElementById('speed').innerText = speedKmh.toFixed(1);
+
+  if (km > 0.005) {
+    const avgPaceSec = elapsed / km;
+    document.getElementById('avgPace').innerText = formatPace(avgPaceSec);
+  }
+
+  if (speedKmh > 0.5) {
+    const currentPaceSec = 3600 / speedKmh;
+    document.getElementById('currentPace').innerText = formatPace(currentPaceSec);
+    paceHistory.push(currentPaceSec);
+    if (paceHistory.length > 30) paceHistory.shift();
+    drawCanvasChart();
+  } else {
+    document.getElementById('currentPace').innerText = '--:--';
+  }
+
+  // تحديث شريط الـ 400 متر
+  const currentLap = lapDist % 400;
+  document.getElementById('bar').style.width = (currentLap / 400 * 100) + '%';
+  document.getElementById('remaining').innerText = Math.round(400 - currentLap) + 'm';
 }
 
-function tick(){if(running)$('time').innerText=timeFmt(elapsedSec())}
-function elapsedSec(){let p=paused?Date.now()-pauseAt:0;return Math.max(0,(Date.now()-startTime-pausedTotal-p)/1000)}
-function setGPS(t,c){$('gpsText').innerText=t;$('gpsDot').className='dot '+c}
-function gpsError(e){if(e.code===1)alert('Location permission was denied. Please allow location access.');setGPS('GPS SEARCHING','warn')}
-function finite(x){return Number.isFinite(x)}
-function mean(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0}
-function std(a){if(a.length<2)return 0;let m=mean(a);return Math.sqrt(mean(a.map(x=>(x-m)**2)))}
-function dist(a,b,c,d){const R=6371000,la=(c-a)*Math.PI/180,lo=(d-b)*Math.PI/180,x=Math.sin(la/2)**2+Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*Math.sin(lo/2)**2;return 2*R*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
-function pace(s){if(!finite(s)||s<=0||s>3600)return'--:--';return String(Math.floor(s/60)).padStart(2,'0')+':'+String(Math.round(s%60)).padStart(2,'0')}
-function shortTime(s){return pace(s)}
-function timeFmt(s){s=Math.max(0,Math.round(s));return String(Math.floor(s/3600)).padStart(2,'0')+':'+String(Math.floor(s%3600/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
-function $(id){return document.getElementById(id)}
-
-function drawChart(){
-  const ch=$('chart');ch.innerHTML='';
-  const a=paceHistory.slice(-45),mn=Math.min(...a),mx=Math.max(...a);
-  a.forEach(v=>{const d=document.createElement('div');d.className='barp';d.style.height=(12+((v-mn)/Math.max(.01,mx-mn))*88)+'%';ch.appendChild(d)})
+function togglePause() {
+  if (!running) return;
+  if (!paused) {
+    paused = true;
+    pauseAt = Date.now();
+    document.getElementById('pauseBtn').innerText = '▶ استئناف';
+    document.getElementById('state').innerText = 'متوقف مؤقتاً';
+  } else {
+    paused = false;
+    pausedTotal += (Date.now() - pauseAt);
+    lastPoint = null;
+    document.getElementById('pauseBtn').innerText = 'Ⅱ إيقاف مؤقت';
+    document.getElementById('state').innerText = 'جاري الجري...';
+  }
 }
 
-function setRace(){
-  const km=parseFloat($('raceDistance').value),parts=$('raceTime').value.split(':').map(Number);
-  let sec=parts.length===2?parts[0]*60+parts[1]:Number(parts[0])*60;
-  if(!finite(sec)||sec<=0)return alert('Enter a valid target time.');
-  race={distance:km,target:sec};$('raceStatus').innerText='ON';$('raceInfo').innerText=`Target ${km} km in ${timeFmt(sec)} · required pace ${pace(sec/km)}/km`;
+function finishRun() {
+  if (!running) return;
+  running = false;
+  clearInterval(timer);
+  if (watchId) navigator.geolocation.clearWatch(watchId);
+
+  const elapsed = getElapsedSec();
+  const km = totalDistance / 1000;
+  const avgPace = km > 0 ? elapsed / km : 0;
+
+  saveRun({ date: new Date().toLocaleDateString('ar-EG'), dist: km, time: elapsed, pace: avgPace });
+
+  document.getElementById('state').innerText = 'اكتمل التمرين';
+  document.getElementById('startBtn').style.display = 'inline-block';
+  document.getElementById('pauseBtn').style.display = 'none';
+  document.getElementById('finishBtn').style.display = 'none';
+  loadHistory();
 }
 
-function resetRun(){
-  total=0;lapDist=0;updates=0;last=null;route=[];speeds=[];paceHistory=[];segments={};startTime=0;pausedTotal=0;pauseAt=0;
-  if(line){map.removeLayer(line);line=null}if(marker){map.removeLayer(marker);marker=null}
-  $('distance').innerText='0.000';$('time').innerText='00:00:00';$('speed').innerText='0.0';$('avgPace').innerText='--:--';$('currentPace').innerText='--:--';$('pace100').innerText='--:--';$('updates').innerText='0';$('runIQ').innerText='--';$('effort').innerText='--';$('consistency').innerText='--';$('finishStrength').innerText='--';$('projection').innerText='--';$('distanceConfidence').innerText='--';$('bar').style.width='0';$('remaining').innerText='400m';$('segments').innerHTML='<div style="color:#697586;margin-top:10px">Segments appear during the run.</div>';$('chart').innerHTML='';
+// --- رسم الخريطة البياني ---
+function drawMap(lat, lng) {
+  route.push([lat, lng]);
+  if (!marker) {
+    marker = L.circleMarker([lat, lng], { radius: 7, color: '#fff', weight: 2, fillColor: '#10b981', fillOpacity: 1 }).addTo(map);
+  } else {
+    marker.setLatLng([lat, lng]);
+  }
+  if (!line) {
+    line = L.polyline(route, { color: '#10b981', weight: 5, opacity: 0.8 }).addTo(map);
+  } else {
+    line.setLatLngs(route);
+  }
+  map.setView([lat, lng], 17, { animate: false });
 }
 
-function saveRun(r){
-  let h=JSON.parse(localStorage.getItem('runtrack_runs')||'[]');h.unshift(r);h=h.slice(0,10);localStorage.setItem('runtrack_runs',JSON.stringify(h));
-  previousBest=h.reduce((b,x)=>!b||x.distance>b.distance?x:b,null);
+function drawCanvasChart() {
+  const canvas = document.getElementById('paceChart');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  if (paceHistory.length < 2) return;
+  const min = Math.min(...paceHistory), max = Math.max(...paceHistory);
+  const range = (max - min) || 1;
+
+  ctx.beginPath();
+  ctx.strokeStyle = '#10b981';
+  ctx.lineWidth = 2;
+
+  paceHistory.forEach((v, i) => {
+    const x = (i / (paceHistory.length - 1)) * canvas.width;
+    const y = canvas.height - ((v - min) / range) * (canvas.height - 10) - 5;
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
 }
-function loadHistory(){
-  const h=JSON.parse(localStorage.getItem('runtrack_runs')||'[]');
-  if(!h.length)return;
-  previousBest=h.reduce((b,x)=>!b||x.distance>b.distance?x:b,null);
-  $('history').innerHTML=h.map(x=>`<div class="historyitem"><div>${x.date}</div><div>${x.distance.toFixed(3)} km<br>${timeFmt(x.time)}</div><div>${pace(x.pace)}/km<br>${x.speed.toFixed(1)} km/h</div></div>`).join('');
+
+// --- العمليات الحسابية المساعدة ---
+function haversine(lat1, lon1, lat2, lon2) {
+  const R = 6371000;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function getElapsedSec() {
+  const p = paused ? Date.now() - pauseAt : 0;
+  return Math.max(0, (Date.now() - startTime - pausedTotal - p) / 1000);
+}
+
+function tick() {
+  if (running && !paused) {
+    const s = getElapsedSec();
+    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), sec = Math.floor(s % 60);
+    document.getElementById('time').innerText = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+  }
+}
+
+function formatPace(s) {
+  if (!Number.isFinite(s) || s <= 0 || s > 3600) return '--:--';
+  return `${String(Math.floor(s / 60)).padStart(2,'0')}:${String(Math.round(s % 60)).padStart(2,'0')}`;
+}
+
+function updateGPSUI(acc) {
+  document.getElementById('accuracy').innerText = Math.round(acc);
+  const dot = document.getElementById('gpsDot');
+  const txt = document.getElementById('gpsText');
+  if (acc <= 15) { dot.className = 'dot good'; txt.innerText = 'إشارة ممتازة'; }
+  else if (acc <= 35) { dot.className = 'dot warn'; txt.innerText = 'إشارة متوسطة'; }
+  else { dot.className = 'dot bad'; txt.innerText = 'إشارة ضعيفة'; }
+}
+
+function gpsError() { document.getElementById('gpsText').innerText = 'خطأ في الـ GPS'; }
+
+function resetRun() {
+  totalDistance = 0; residualDistance = 0; lapDist = 0; lastPoint = null; route = []; paceHistory = []; stepCount = 0;
+  if (line) map.removeLayer(line); line = null;
+  if (marker) map.removeLayer(marker); marker = null;
+  document.getElementById('distance').innerText = '0.000';
+  document.getElementById('speed').innerText = '0.0';
+  document.getElementById('avgPace').innerText = '--:--';
+  document.getElementById('currentPace').innerText = '--:--';
+  document.getElementById('steps').innerText = '0';
+}
+
+function saveRun(r) {
+  let h = JSON.parse(localStorage.getItem('runtrack_v6') || '[]');
+  h.unshift(r); localStorage.setItem('runtrack_v6', JSON.stringify(h.slice(0, 10)));
+}
+
+function loadHistory() {
+  let h = JSON.parse(localStorage.getItem('runtrack_v6') || '[]');
+  if (!h.length) return;
+  document.getElementById('history').innerHTML = h.map(x => `
+    <div class="history-item">
+      <div>${x.date}</div>
+      <div>${x.dist.toFixed(3)} كم</div>
+      <div>${formatPace(x.pace)} /كم</div>
+    </div>`).join('');
 }
 loadHistory();
-
-setInterval(()=>{if(running&&last){const age=Math.round((Date.now()-last.time)/1000);$('gpsAge').innerText=age+'s';if(age>5)setGPS('GPS DELAY','warn')}},500);
 </script>
 </body>
 </html>
