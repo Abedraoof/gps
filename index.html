@@ -3,17 +3,27 @@
 
 <head>
 <meta name="google-site-verification" content="4j5ULNTNE2ixVPpcLIiCN8Q4c06Ce2WU94GCSvMtyeU" />
+
 <meta charset="UTF-8">
 
 <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width,
+             initial-scale=1.0,
+             maximum-scale=1.0,
+             user-scalable=no"
+>
+
+<meta
+    name="theme-color"
+    content="#080a0f"
 >
 
 <title>RunTrack GPS</title>
 
 
-<!-- Leaflet Map -->
+<!-- Leaflet -->
+
 <link
     rel="stylesheet"
     href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -22,26 +32,53 @@
 
 <style>
 
+/* =====================================================
+   GLOBAL
+===================================================== */
+
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
 
     margin: 0;
 
-    background: #080b10;
+    background:
+        radial-gradient(
+            circle at top,
+            #151c27 0%,
+            #080a0f 55%
+        );
 
     color: white;
 
     font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
         Arial,
-        Helvetica,
         sans-serif;
+
+    min-height: 100vh;
 }
 
 
-.container {
+button {
+
+    font-family: inherit;
+
+    border: 0;
+
+    outline: 0;
+
+    cursor: pointer;
+}
+
+
+.app {
 
     width: 100%;
 
@@ -49,13 +86,15 @@ body {
 
     margin: auto;
 
-    padding: 20px;
+    padding: 15px 15px 40px;
 }
 
 
-/* HEADER */
+/* =====================================================
+   HEADER
+===================================================== */
 
-header {
+.header {
 
     display: flex;
 
@@ -63,89 +102,257 @@ header {
 
     align-items: center;
 
-    margin-bottom: 20px;
+    padding: 8px 3px 18px;
 }
 
 
 .logo {
 
-    font-size: 25px;
+    font-size: 22px;
 
-    font-weight: 700;
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
 }
 
 
-.status {
+.logo span {
 
-    color: #55e88b;
-
-    font-size: 14px;
+    color: #62f19a;
 }
 
 
-/* TIMER */
+.gps-indicator {
 
-.timer-card {
+    display: flex;
 
-    background: #131821;
+    align-items: center;
 
-    border-radius: 22px;
+    gap: 7px;
+
+    color: #8d98a9;
+
+    font-size: 12px;
+
+    font-weight: 600;
+}
+
+
+.gps-dot {
+
+    width: 8px;
+
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #6c7480;
+}
+
+
+.gps-dot.active {
+
+    background: #5cf09a;
+
+    box-shadow:
+        0 0 12px #5cf09a;
+}
+
+
+.gps-dot.warning {
+
+    background: #ffc857;
+}
+
+
+/* =====================================================
+   MAIN RUN CARD
+===================================================== */
+
+.run-card {
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(26,33,45,.98),
+            rgba(15,20,28,.98)
+        );
+
+    border: 1px solid #252d39;
+
+    border-radius: 26px;
 
     padding: 25px;
 
     text-align: center;
 
-    margin-bottom: 15px;
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.25);
+
+    margin-bottom: 12px;
+}
+
+
+.state {
+
+    color: #7f8a9a;
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.5px;
+
+    margin-bottom: 8px;
 }
 
 
 .timer {
 
-    font-size: 55px;
+    font-size: clamp(45px, 12vw, 70px);
 
-    font-weight: 700;
+    line-height: 1;
 
-    margin-bottom: 15px;
+    font-weight: 800;
+
+    letter-spacing: -3px;
+
+    margin: 10px 0 22px;
 }
 
 
-/* BUTTONS */
+.main-buttons {
 
-button {
+    display: flex;
 
-    border: none;
+    justify-content: center;
+
+    gap: 10px;
+
+    flex-wrap: wrap;
+}
+
+
+.start-button {
+
+    background: #5cf09a;
+
+    color: #06100a;
+
+    padding: 16px 46px;
 
     border-radius: 50px;
 
-    padding: 15px 45px;
+    font-size: 16px;
 
-    font-size: 17px;
+    font-weight: 800;
 
-    font-weight: bold;
+    box-shadow:
+        0 8px 25px rgba(92,240,154,.2);
 
-    cursor: pointer;
+    transition: .2s;
 }
 
 
-.start {
+.start-button:active {
 
-    background: #55e88b;
-
-    color: #061009;
+    transform: scale(.96);
 }
 
 
-.stop {
+.pause-button {
 
-    background: #ff4d4d;
+    display: none;
+
+    background: #27303d;
 
     color: white;
 
-    display: none;
+    padding: 16px 28px;
+
+    border-radius: 50px;
+
+    font-size: 15px;
+
+    font-weight: 800;
 }
 
 
-/* STATS */
+.stop-button {
+
+    display: none;
+
+    background: #ef4f5f;
+
+    color: white;
+
+    padding: 16px 30px;
+
+    border-radius: 50px;
+
+    font-size: 15px;
+
+    font-weight: 800;
+}
+
+
+/* =====================================================
+   BIG DISTANCE
+===================================================== */
+
+.distance-card {
+
+    background: #111720;
+
+    border-radius: 22px;
+
+    padding: 20px;
+
+    margin-bottom: 12px;
+
+    text-align: center;
+
+    border: 1px solid #202834;
+}
+
+
+.distance-label {
+
+    color: #788495;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1.5px;
+}
+
+
+.distance {
+
+    font-size: 55px;
+
+    font-weight: 800;
+
+    letter-spacing: -2px;
+
+    margin: 4px 0;
+}
+
+
+.distance-unit {
+
+    color: #788495;
+
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
 
 .stats {
 
@@ -154,132 +361,416 @@ button {
     grid-template-columns:
         repeat(2, 1fr);
 
-    gap: 12px;
+    gap: 10px;
 
-    margin-bottom: 15px;
+    margin-bottom: 12px;
 }
 
 
-.card {
+.stat {
 
-    background: #131821;
+    background: #111720;
+
+    border: 1px solid #202834;
 
     border-radius: 18px;
 
-    padding: 20px;
+    padding: 17px;
 }
 
 
-.label {
+.stat-label {
 
-    color: #8993a3;
+    color: #778293;
 
-    font-size: 13px;
+    font-size: 11px;
 
-    margin-bottom: 10px;
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 8px;
 }
 
 
-.value {
+.stat-value {
 
-    font-size: 29px;
+    font-size: 25px;
 
-    font-weight: bold;
+    font-weight: 800;
 }
 
 
-.unit {
+.stat-unit {
 
-    color: #8993a3;
+    color: #778293;
 
-    font-size: 13px;
+    font-size: 11px;
 
-    margin-top: 4px;
+    margin-top: 3px;
 }
 
 
-/* MAP */
+/* =====================================================
+   MAP
+===================================================== */
 
-#map {
+.map-container {
+
+    position: relative;
 
     width: 100%;
 
     height: 430px;
 
-    border-radius: 20px;
+    border-radius: 22px;
 
     overflow: hidden;
 
-    margin-bottom: 15px;
+    border: 1px solid #202834;
+
+    margin-bottom: 12px;
 }
 
 
-/* SUMMARY */
+#map {
 
-.summary {
+    width: 100%;
 
-    display: none;
+    height: 100%;
+}
 
-    background: #131821;
+
+.map-status {
+
+    position: absolute;
+
+    z-index: 1000;
+
+    top: 12px;
+
+    left: 12px;
+
+    background: rgba(10,13,18,.88);
+
+    backdrop-filter: blur(10px);
+
+    padding: 8px 12px;
+
+    border-radius: 30px;
+
+    color: #dce2ea;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   NEXT LAP
+===================================================== */
+
+.lap-progress {
+
+    background: #111720;
+
+    border: 1px solid #202834;
 
     border-radius: 20px;
 
-    padding: 22px;
+    padding: 18px;
 
-    margin-top: 15px;
+    margin-bottom: 12px;
 }
 
 
-.summary h2 {
-
-    margin-top: 0;
-}
-
-
-.summary-row {
+.lap-header {
 
     display: flex;
 
     justify-content: space-between;
 
-    padding: 12px 0;
+    align-items: center;
+
+    margin-bottom: 12px;
+}
+
+
+.lap-title {
+
+    font-weight: 800;
+
+    font-size: 14px;
+}
+
+
+.lap-distance {
+
+    color: #5cf09a;
+
+    font-weight: 800;
+
+    font-size: 13px;
+}
+
+
+.progress {
+
+    height: 8px;
+
+    width: 100%;
+
+    background: #252d38;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+
+.progress-bar {
+
+    height: 100%;
+
+    width: 0%;
+
+    background: #5cf09a;
+
+    border-radius: 20px;
+
+    transition: width .2s linear;
+}
+
+
+/* =====================================================
+   LAPS
+===================================================== */
+
+.laps-card {
+
+    background: #111720;
+
+    border: 1px solid #202834;
+
+    border-radius: 20px;
+
+    padding: 18px;
+
+    margin-bottom: 12px;
+}
+
+
+.section-title {
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    margin-bottom: 14px;
+}
+
+
+.lap-row {
+
+    display: grid;
+
+    grid-template-columns:
+        45px
+        1fr
+        1fr
+        1fr;
+
+    padding: 11px 0;
 
     border-bottom:
-        1px solid #242b36;
+        1px solid #202733;
+
+    font-size: 13px;
+
+    align-items: center;
 }
 
 
-.summary-row:last-child {
+.lap-row:last-child {
 
-    border-bottom: none;
+    border-bottom: 0;
 }
 
 
-/* MOBILE */
+.lap-number {
 
-@media(max-width: 600px) {
+    color: #5cf09a;
 
-    .container {
+    font-weight: 800;
+}
 
-        padding: 12px;
+
+.lap-time {
+
+    text-align: center;
+}
+
+
+.lap-pace {
+
+    text-align: center;
+
+    color: #aab4c3;
+}
+
+
+.lap-speed {
+
+    text-align: right;
+
+    color: #aab4c3;
+}
+
+
+/* =====================================================
+   SUMMARY
+===================================================== */
+
+.summary {
+
+    display: none;
+
+    background:
+        linear-gradient(
+            145deg,
+            #151d28,
+            #10151d
+        );
+
+    border:
+        1px solid #28313d;
+
+    border-radius: 24px;
+
+    padding: 22px;
+
+    margin-top: 12px;
+}
+
+
+.summary-title {
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+    margin-bottom: 20px;
+}
+
+
+.summary-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap: 10px;
+}
+
+
+.summary-stat {
+
+    background: #0d1219;
+
+    border-radius: 15px;
+
+    padding: 15px;
+}
+
+
+.summary-label {
+
+    color: #7c8797;
+
+    font-size: 11px;
+
+    text-transform: uppercase;
+
+    margin-bottom: 7px;
+}
+
+
+.summary-value {
+
+    font-size: 21px;
+
+    font-weight: 800;
+}
+
+
+/* =====================================================
+   EMPTY LAPS
+===================================================== */
+
+.empty {
+
+    color: #687383;
+
+    font-size: 13px;
+
+    text-align: center;
+
+    padding: 15px 0;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media(max-width:600px) {
+
+    .app {
+
+        padding:
+            10px
+            10px
+            30px;
+    }
+
+
+    .run-card {
+
+        padding: 20px 15px;
+
+        border-radius: 22px;
     }
 
 
     .timer {
 
-        font-size: 45px;
+        font-size: 48px;
     }
 
 
-    .value {
+    .distance {
 
-        font-size: 24px;
+        font-size: 48px;
     }
 
 
-    #map {
+    .map-container {
 
-        height: 350px;
+        height: 380px;
+    }
+
+
+    .stat {
+
+        padding: 15px;
+    }
+
+
+    .stat-value {
+
+        font-size: 23px;
     }
 
 }
@@ -292,412 +783,574 @@ button {
 <body>
 
 
-<div class="container">
+<div class="app">
 
 
-<header>
+<!-- ===================================================
+     HEADER
+=================================================== -->
 
-<div class="logo">
+<div class="header">
 
-🏃 RunTrack
+    <div class="logo">
+        RUN<span>TRACK</span>
+    </div>
 
-</div>
+    <div class="gps-indicator">
 
+        <div
+            class="gps-dot"
+            id="gpsDot">
+        </div>
 
-<div
-    class="status"
-    id="status"
->
+        <span id="gpsText">
+            GPS OFF
+        </span>
 
-Ready
-
-</div>
-
-</header>
-
-
-
-<!-- TIMER -->
-
-<div class="timer-card">
-
-
-<div
-    class="timer"
-    id="timer"
->
-
-00:00:00
-
-</div>
-
-
-<button
-    class="start"
-    id="startButton"
-    onclick="startRun()"
->
-
-▶ START
-
-</button>
-
-
-<button
-    class="stop"
-    id="stopButton"
-    onclick="stopRun()"
->
-
-■ STOP
-
-</button>
-
+    </div>
 
 </div>
 
 
 
-<!-- STATS -->
+<!-- ===================================================
+     RUN CONTROL
+=================================================== -->
+
+<div class="run-card">
+
+    <div
+        class="state"
+        id="state">
+        Ready
+    </div>
+
+
+    <div
+        class="timer"
+        id="timer">
+        00:00:00
+    </div>
+
+
+    <div class="main-buttons">
+
+
+        <button
+            class="start-button"
+            id="startButton"
+            onclick="startRun()">
+
+            ▶ START
+
+        </button>
+
+
+        <button
+            class="pause-button"
+            id="pauseButton"
+            onclick="togglePause()">
+
+            ❚❚ PAUSE
+
+        </button>
+
+
+        <button
+            class="stop-button"
+            id="stopButton"
+            onclick="finishRun()">
+
+            ■ FINISH
+
+        </button>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- ===================================================
+     DISTANCE
+=================================================== -->
+
+<div class="distance-card">
+
+    <div class="distance-label">
+        Distance
+    </div>
+
+    <div
+        class="distance"
+        id="distance">
+        0.00
+    </div>
+
+    <div class="distance-unit">
+        kilometers
+    </div>
+
+</div>
+
+
+
+<!-- ===================================================
+     STATS
+=================================================== -->
 
 <div class="stats">
 
 
-<div class="card">
+    <div class="stat">
 
-<div class="label">
+        <div class="stat-label">
+            Current Pace
+        </div>
 
-DISTANCE
+        <div
+            class="stat-value"
+            id="currentPace">
+            --:--
+        </div>
 
-</div>
+        <div class="stat-unit">
+            min / km
+        </div>
 
+    </div>
 
-<div
-    class="value"
-    id="distance"
->
 
-0.00
 
-</div>
+    <div class="stat">
 
+        <div class="stat-label">
+            Avg Pace
+        </div>
 
-<div class="unit">
+        <div
+            class="stat-value"
+            id="averagePace">
+            --:--
+        </div>
 
-km
+        <div class="stat-unit">
+            min / km
+        </div>
 
-</div>
+    </div>
 
-</div>
 
 
+    <div class="stat">
 
-<div class="card">
+        <div class="stat-label">
+            Speed
+        </div>
 
-<div class="label">
+        <div
+            class="stat-value"
+            id="speed">
+            0.0
+        </div>
 
-CURRENT SPEED
+        <div class="stat-unit">
+            km / h
+        </div>
 
-</div>
+    </div>
 
 
-<div
-    class="value"
-    id="speed"
->
 
-0.0
+    <div class="stat">
 
-</div>
+        <div class="stat-label">
+            100m Pace
+        </div>
 
+        <div
+            class="stat-value"
+            id="pace100">
+            --:--
+        </div>
 
-<div class="unit">
+        <div class="stat-unit">
+            min / 100m
+        </div>
 
-km/h
+    </div>
 
-</div>
 
-</div>
 
+    <div class="stat">
 
+        <div class="stat-label">
+            GPS Accuracy
+        </div>
 
-<div class="card">
+        <div
+            class="stat-value"
+            id="accuracy">
+            --
+        </div>
 
-<div class="label">
+        <div class="stat-unit">
+            meters
+        </div>
 
-PACE / 100m
+    </div>
 
-</div>
 
 
-<div
-    class="value"
-    id="pace100"
->
-
---:--
-
-</div>
-
-
-<div class="unit">
-
-min / 100m
-
-</div>
-
-</div>
-
-
-
-<div class="card">
-
-<div class="label">
-
-AVG PACE
-
-</div>
-
-
-<div
-    class="value"
-    id="avgPace"
->
-
---:--
-
-</div>
-
-
-<div class="unit">
-
-min / km
-
-</div>
-
-</div>
-
-
-
-<div class="card">
-
-<div class="label">
-
-GPS ACCURACY
-
-</div>
-
-
-<div
-    class="value"
-    id="accuracy"
->
-
---
-
-</div>
-
-
-<div class="unit">
-
-meters
-
-</div>
-
-</div>
-
-
-
-<div class="card">
-
-<div class="label">
-
-GPS STATUS
-
-</div>
-
-
-<div
-    class="value"
-    id="gpsStatus"
->
-
-OFF
-
-</div>
-
-</div>
+    <div class="stat">
+
+        <div class="stat-label">
+            Current Lap
+        </div>
+
+        <div
+            class="stat-value"
+            id="currentLap">
+            1
+        </div>
+
+        <div class="stat-unit">
+            400 meters
+        </div>
+
+    </div>
 
 
 </div>
 
 
 
-<!-- MAP -->
+<!-- ===================================================
+     MAP
+=================================================== -->
 
-<div id="map"></div>
+<div class="map-container">
+
+    <div
+        class="map-status"
+        id="mapStatus">
+        Waiting for GPS...
+    </div>
+
+    <div id="map"></div>
+
+</div>
 
 
 
-<!-- SUMMARY -->
+<!-- ===================================================
+     LAP PROGRESS
+=================================================== -->
+
+<div class="lap-progress">
+
+    <div class="lap-header">
+
+        <div class="lap-title">
+            NEXT 400m
+        </div>
+
+        <div
+            class="lap-distance"
+            id="nextLap">
+            400m
+        </div>
+
+    </div>
+
+
+    <div class="progress">
+
+        <div
+            class="progress-bar"
+            id="progressBar">
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ===================================================
+     LAPS
+=================================================== -->
+
+<div class="laps-card">
+
+    <div class="section-title">
+        Laps
+    </div>
+
+
+    <div id="laps">
+
+        <div class="empty">
+            Your laps will appear here
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ===================================================
+     SUMMARY
+=================================================== -->
 
 <div
     class="summary"
-    id="summary"
->
+    id="summary">
 
-<h2>
-
-🏁 Run Complete
-
-</h2>
+    <div class="summary-title">
+        🏁 Run Complete
+    </div>
 
 
-<div class="summary-row">
+    <div class="summary-grid">
 
-<span>Distance</span>
 
-<strong id="finalDistance">
+        <div class="summary-stat">
 
-0.00 km
+            <div class="summary-label">
+                Distance
+            </div>
 
-</strong>
+            <div
+                class="summary-value"
+                id="finalDistance">
+                0.00 km
+            </div>
+
+        </div>
+
+
+
+        <div class="summary-stat">
+
+            <div class="summary-label">
+                Time
+            </div>
+
+            <div
+                class="summary-value"
+                id="finalTime">
+                00:00:00
+            </div>
+
+        </div>
+
+
+
+        <div class="summary-stat">
+
+            <div class="summary-label">
+                Avg Speed
+            </div>
+
+            <div
+                class="summary-value"
+                id="finalSpeed">
+                0.0 km/h
+            </div>
+
+        </div>
+
+
+
+        <div class="summary-stat">
+
+            <div class="summary-label">
+                Avg Pace
+            </div>
+
+            <div
+                class="summary-value"
+                id="finalPace">
+                --:--
+            </div>
+
+        </div>
+
+
+
+        <div class="summary-stat">
+
+            <div class="summary-label">
+                Laps
+            </div>
+
+            <div
+                class="summary-value"
+                id="finalLaps">
+                0
+            </div>
+
+        </div>
+
+
+
+        <div class="summary-stat">
+
+            <div class="summary-label">
+                Best Lap
+            </div>
+
+            <div
+                class="summary-value"
+                id="bestLap">
+                --:--
+            </div>
+
+        </div>
+
+
+    </div>
 
 </div>
 
 
-<div class="summary-row">
-
-<span>Time</span>
-
-<strong id="finalTime">
-
-00:00:00
-
-</strong>
-
-</div>
-
-
-<div class="summary-row">
-
-<span>Average Speed</span>
-
-<strong id="finalSpeed">
-
-0.0 km/h
-
-</strong>
-
-</div>
-
-
-<div class="summary-row">
-
-<span>Average Pace</span>
-
-<strong id="finalPace">
-
---:--
-
-</strong>
-
-</div>
-
-
-<div class="summary-row">
-
-<span>100m Pace</span>
-
-<strong id="final100">
-
---:--
-
-</strong>
-
-</div>
-
-
-</div>
-
-
 </div>
 
 
 
-<!-- Leaflet -->
+<!-- ===================================================
+     LEAFLET
+=================================================== -->
 
 <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
 </script>
 
 
 
 <script>
 
+/* =====================================================
+   CONFIGURATION
+===================================================== */
 
-/* ==========================================
-   VARIABLES
-========================================== */
+
+/*
+    Standard athletics track lap.
+    Change this if your track has another length.
+*/
+
+const LAP_DISTANCE = 400;
 
 
-let map;
+/*
+    Ignore GPS jumps below this distance.
+*/
 
-let marker;
+const MIN_MOVEMENT = 2;
 
-let routeLine;
 
-let watchID = null;
+/*
+    Ignore GPS points with very poor accuracy.
+*/
 
-let timerID = null;
+const MAX_ACCURACY = 50;
+
+
+
+/* =====================================================
+   STATE
+===================================================== */
 
 let running = false;
 
+let paused = false;
+
 let startTime = null;
 
-let lastPosition = null;
+let pausedAt = null;
+
+let totalPausedTime = 0;
+
+let timerInterval = null;
+
+let gpsWatch = null;
+
+let lastPoint = null;
 
 let totalDistance = 0;
 
 let route = [];
 
+let laps = [];
+
+let currentLapDistance = 0;
+
+let currentLapStartTime = null;
+
+let marker = null;
+
+let routeLine = null;
+
+let wakeLock = null;
 
 
-/* ==========================================
-   MAP INITIALIZATION
-========================================== */
 
+/* =====================================================
+   MAP
+===================================================== */
 
-map = L.map("map").setView(
+const map = L.map("map", {
+
+    zoomControl: false
+
+}).setView(
+
     [31.7683, 35.2137],
-    13
+
+    15
+
 );
 
 
 L.tileLayer(
+
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+
     {
+
         maxZoom: 19,
 
         attribution:
-            '&copy; OpenStreetMap contributors'
+            "&copy; OpenStreetMap contributors"
+
     }
+
 ).addTo(map);
 
 
+L.control.zoom({
 
-/* ==========================================
-   START RUN
-========================================== */
+    position: "bottomright"
+
+}).addTo(map);
 
 
-function startRun() {
+
+/* =====================================================
+   START
+===================================================== */
+
+async function startRun() {
 
 
     if (!navigator.geolocation) {
 
         alert(
-            "Your browser does not support GPS."
+            "GPS is not supported by this browser."
         );
 
         return;
@@ -705,29 +1358,27 @@ function startRun() {
 
 
     /*
-        Request GPS permission.
+        Ask for location permission.
     */
 
     navigator.geolocation.getCurrentPosition(
 
-        function(position) {
+        position => {
 
-            beginTracking(position);
-
-        },
-
-        function(error) {
-
-            handleGPSError(error);
+            beginRun(position);
 
         },
+
+        gpsError,
 
         {
+
             enableHighAccuracy: true,
 
             timeout: 15000,
 
             maximumAge: 0
+
         }
 
     );
@@ -736,27 +1387,42 @@ function startRun() {
 
 
 
-/* ==========================================
-   BEGIN TRACKING
-========================================== */
+/* =====================================================
+   BEGIN
+===================================================== */
 
-
-function beginTracking(position) {
+async function beginRun(position) {
 
 
     running = true;
 
+    paused = false;
+
+
     startTime = Date.now();
+
+    pausedAt = null;
+
+    totalPausedTime = 0;
+
 
     totalDistance = 0;
 
-    lastPosition = null;
+    currentLapDistance = 0;
+
+    currentLapStartTime =
+        Date.now();
+
+
+    lastPoint = null;
 
     route = [];
 
+    laps = [];
+
 
     /*
-        Reset UI
+        Clear old UI.
     */
 
     document.getElementById(
@@ -770,13 +1436,39 @@ function beginTracking(position) {
 
 
     document.getElementById(
+        "currentPace"
+    ).innerText = "--:--";
+
+
+    document.getElementById(
+        "averagePace"
+    ).innerText = "--:--";
+
+
+    document.getElementById(
         "pace100"
     ).innerText = "--:--";
 
 
     document.getElementById(
-        "avgPace"
-    ).innerText = "--:--";
+        "currentLap"
+    ).innerText = "1";
+
+
+    document.getElementById(
+        "nextLap"
+    ).innerText =
+        "400m";
+
+
+    document.getElementById(
+        "progressBar"
+    ).style.width = "0%";
+
+
+    document.getElementById(
+        "laps"
+    ).innerHTML = "";
 
 
     document.getElementById(
@@ -784,9 +1476,18 @@ function beginTracking(position) {
     ).style.display = "none";
 
 
+    /*
+        UI
+    */
+
     document.getElementById(
         "startButton"
     ).style.display = "none";
+
+
+    document.getElementById(
+        "pauseButton"
+    ).style.display = "inline-block";
 
 
     document.getElementById(
@@ -795,48 +1496,55 @@ function beginTracking(position) {
 
 
     document.getElementById(
-        "status"
+        "state"
     ).innerText = "Running";
 
 
     document.getElementById(
-        "gpsStatus"
-    ).innerText = "ACTIVE";
+        "gpsText"
+    ).innerText = "GPS ACTIVE";
+
+
+    document.getElementById(
+        "gpsDot"
+    ).className =
+        "gps-dot active";
 
 
     /*
-        Start timer
+        Timer
     */
 
-    timerID = setInterval(
-        updateTimer,
-        1000
-    );
+    timerInterval =
+        setInterval(
+            updateTimer,
+            500
+        );
 
 
     /*
-        Add first GPS point
+        First GPS point.
     */
 
-    updatePosition(position);
+    processGPS(position);
 
 
     /*
-        Start continuous GPS tracking
+        Continuous GPS.
     */
 
-    watchID =
+    gpsWatch =
         navigator.geolocation.watchPosition(
 
-            updatePosition,
+            processGPS,
 
-            handleGPSError,
+            gpsError,
 
             {
 
                 enableHighAccuracy: true,
 
-                maximumAge: 0,
+                maximumAge: 1000,
 
                 timeout: 10000
 
@@ -844,19 +1552,25 @@ function beginTracking(position) {
 
         );
 
+
+    /*
+        Keep screen awake.
+    */
+
+    await requestWakeLock();
+
 }
 
 
 
-/* ==========================================
-   GPS POSITION UPDATE
-========================================== */
+/* =====================================================
+   GPS
+===================================================== */
+
+function processGPS(position) {
 
 
-function updatePosition(position) {
-
-
-    if (!running)
+    if (!running || paused)
         return;
 
 
@@ -873,7 +1587,7 @@ function updatePosition(position) {
 
 
     /*
-        GPS accuracy
+        Accuracy display.
     */
 
     document.getElementById(
@@ -883,55 +1597,132 @@ function updatePosition(position) {
 
 
     /*
-        Ignore very inaccurate GPS points
+        Bad GPS.
     */
 
-    if (accuracy > 50)
+    if (accuracy > MAX_ACCURACY) {
+
+        document.getElementById(
+            "gpsText"
+        ).innerText =
+            "GPS WEAK";
+
+
+        document.getElementById(
+            "gpsDot"
+        ).className =
+            "gps-dot warning";
+
+
         return;
+    }
+
+
+    document.getElementById(
+        "gpsText"
+    ).innerText =
+        "GPS ACTIVE";
+
+
+    document.getElementById(
+        "gpsDot"
+    ).className =
+        "gps-dot active";
 
 
     /*
-        Calculate distance
+        First point.
     */
 
-    if (lastPosition !== null) {
+    if (lastPoint === null) {
+
+        lastPoint = {
+
+            lat: lat,
+
+            lon: lon
+
+        };
 
 
-        const distance =
-            calculateDistance(
-
-                lastPosition.lat,
-
-                lastPosition.lon,
-
-                lat,
-
-                lon
-
-            );
+        addRoutePoint(
+            lat,
+            lon
+        );
 
 
-        /*
-            Ignore GPS noise.
-
-            3 meters is useful
-            for running tracking.
-        */
-
-        if (distance >= 3) {
-
-            totalDistance += distance;
-
-        }
-
+        return;
     }
 
 
     /*
-        Save position
+        Calculate movement.
     */
 
-    lastPosition = {
+    const movement =
+        distanceBetween(
+
+            lastPoint.lat,
+
+            lastPoint.lon,
+
+            lat,
+
+            lon
+
+        );
+
+
+    /*
+        Ignore GPS noise.
+    */
+
+    if (movement < MIN_MOVEMENT)
+        return;
+
+
+    /*
+        Prevent impossible GPS jumps.
+        Example:
+        100 meters in 1 second.
+    */
+
+    const now = Date.now();
+
+    const elapsed =
+        (now - startTime -
+            totalPausedTime) / 1000;
+
+
+    if (
+        elapsed > 0 &&
+        movement > 30
+    ) {
+
+        /*
+            If GPS suddenly jumps
+            more than 30m,
+            ignore the point.
+        */
+
+        return;
+    }
+
+
+    /*
+        Add distance.
+    */
+
+    totalDistance += movement;
+
+    currentLapDistance += movement;
+
+
+    /*
+        Save point.
+    */
+
+    lastPoint = {
 
         lat: lat,
 
@@ -940,27 +1731,82 @@ function updatePosition(position) {
     };
 
 
+    addRoutePoint(
+        lat,
+        lon
+    );
+
+
     /*
-        Add point to route
+        Update stats.
     */
 
-    route.push([lat, lon]);
+    updateStats();
 
 
     /*
-        Update marker
+        Check 400m lap.
     */
 
-    if (marker === undefined) {
+    while (
+        currentLapDistance >=
+        LAP_DISTANCE
+    ) {
 
+        createLap();
+
+    }
+
+}
+
+
+
+/* =====================================================
+   ROUTE
+===================================================== */
+
+function addRoutePoint(
+    lat,
+    lon
+) {
+
+
+    route.push([
+        lat,
+        lon
+    ]);
+
+
+    /*
+        Marker.
+    */
+
+    if (!marker) {
 
         marker =
-            L.marker([lat, lon])
-            .addTo(map);
+            L.circleMarker(
 
+                [lat, lon],
 
-    } else {
+                {
 
+                    radius: 8,
+
+                    color: "#ffffff",
+
+                    fillColor: "#5cf09a",
+
+                    fillOpacity: 1,
+
+                    weight: 3
+
+                }
+
+            ).addTo(map);
+
+    }
+
+    else {
 
         marker.setLatLng([
             lat,
@@ -971,27 +1817,10 @@ function updatePosition(position) {
 
 
     /*
-        Move map
-        to current position
+        Route line.
     */
 
-    map.setView(
-        [lat, lon],
-        18
-    );
-
-
-    /*
-        Draw route
-    */
-
-    if (routeLine) {
-
-        routeLine.setLatLngs(
-            route
-        );
-
-    } else {
+    if (!routeLine) {
 
         routeLine =
             L.polyline(
@@ -999,17 +1828,200 @@ function updatePosition(position) {
                 route,
 
                 {
-                    weight: 5
+
+                    color: "#5cf09a",
+
+                    weight: 5,
+
+                    opacity: .9,
+
+                    lineJoin: "round"
+
                 }
 
             ).addTo(map);
 
     }
 
+    else {
+
+        routeLine.setLatLngs(
+            route
+        );
+
+    }
+
 
     /*
-        Distance
+        Follow runner.
     */
+
+    map.setView(
+        [lat, lon],
+        18,
+        {
+            animate: true
+        }
+    );
+
+
+    document.getElementById(
+        "mapStatus"
+    ).innerText =
+        "📍 Live location";
+
+}
+
+
+
+/* =====================================================
+   LAP
+===================================================== */
+
+function createLap() {
+
+
+    const now =
+        Date.now();
+
+
+    const lapTime =
+        (
+            now -
+            currentLapStartTime
+        ) / 1000;
+
+
+    /*
+        Because GPS may jump
+        beyond exactly 400m,
+        preserve the remaining
+        distance for next lap.
+    */
+
+    currentLapDistance -=
+        LAP_DISTANCE;
+
+
+    const speed =
+        LAP_DISTANCE /
+        lapTime *
+        3.6;
+
+
+    const pace =
+        lapTime /
+        0.4;
+
+
+    const lapNumber =
+        laps.length + 1;
+
+
+    const lap = {
+
+        number:
+            lapNumber,
+
+        time:
+            lapTime,
+
+        pace:
+            pace,
+
+        speed:
+            speed
+
+    };
+
+
+    laps.push(lap);
+
+
+    currentLapStartTime =
+        now;
+
+
+    /*
+        Update UI.
+    */
+
+    document.getElementById(
+        "currentLap"
+    ).innerText =
+        lapNumber + 1;
+
+
+    addLapToUI(
+        lap
+    );
+
+}
+
+
+
+/* =====================================================
+   LAP UI
+===================================================== */
+
+function addLapToUI(lap) {
+
+
+    /*
+        Remove empty message.
+    */
+
+    const container =
+        document.getElementById(
+            "laps"
+        );
+
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+
+    row.className =
+        "lap-row";
+
+
+    row.innerHTML = `
+
+        <div class="lap-number">
+            #${lap.number}
+        </div>
+
+        <div class="lap-time">
+            ${formatTimeShort(lap.time)}
+        </div>
+
+        <div class="lap-pace">
+            ${formatPace(lap.pace)}
+        </div>
+
+        <div class="lap-speed">
+            ${lap.speed.toFixed(1)}
+        </div>
+
+    `;
+
+
+    container.prepend(
+        row
+    );
+
+}
+
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats() {
+
 
     const distanceKm =
         totalDistance / 1000;
@@ -1022,147 +2034,127 @@ function updatePosition(position) {
 
 
     /*
-        Speed
+        Elapsed active time.
     */
 
-    let speed =
-        position.coords.speed;
-
-
-    if (
-        speed !== null &&
-        speed >= 0
-    ) {
-
-        speed =
-            speed * 3.6;
-
-    } else {
-
-        speed =
-            calculateAverageSpeed();
-
-    }
-
-
-    document.getElementById(
-        "speed"
-    ).innerText =
-        speed.toFixed(1);
+    const elapsed =
+        getElapsedSeconds();
 
 
     /*
-        Pace per 100m
+        Average pace.
     */
 
-    if (speed > 0) {
+    if (distanceKm > 0) {
 
-
-        const seconds100 =
-            360 / speed;
+        const avgPace =
+            elapsed /
+            distanceKm;
 
 
         document.getElementById(
-            "pace100"
+            "averagePace"
         ).innerText =
-            formatPace(seconds100);
+            formatPace(avgPace);
 
     }
 
 
     /*
-        Average Pace
+        Average speed.
     */
 
-    updateAveragePace();
+    if (elapsed > 0) {
+
+        const speed =
+            distanceKm /
+            (elapsed / 3600);
+
+
+        document.getElementById(
+            "speed"
+        ).innerText =
+            speed.toFixed(1);
+
+
+        /*
+            Current pace
+            based on recent movement.
+        */
+
+        if (speed > 0) {
+
+            const currentPace =
+                60 / speed;
+
+
+            document.getElementById(
+                "currentPace"
+            ).innerText =
+                formatPace(
+                    currentPace * 60
+                );
+
+
+            const pace100 =
+                360 / speed;
+
+
+            document.getElementById(
+                "pace100"
+            ).innerText =
+                formatPace(
+                    pace100
+                );
+
+        }
+
+    }
+
+
+    /*
+        Current lap progress.
+    */
+
+    const progress =
+        Math.min(
+            (
+                currentLapDistance /
+                LAP_DISTANCE
+            ) * 100,
+
+            100
+        );
+
+
+    document.getElementById(
+        "progressBar"
+    ).style.width =
+        progress + "%";
+
+
+    const remaining =
+        Math.max(
+            0,
+            LAP_DISTANCE -
+            currentLapDistance
+        );
+
+
+    document.getElementById(
+        "nextLap"
+    ).innerText =
+        Math.round(
+            remaining
+        ) + "m";
 
 }
 
 
 
-/* ==========================================
-   DISTANCE
-   HAVERSINE FORMULA
-========================================== */
-
-
-function calculateDistance(
-    lat1,
-    lon1,
-    lat2,
-    lon2
-) {
-
-
-    const R = 6371000;
-
-
-    const dLat =
-        toRadians(
-            lat2 - lat1
-        );
-
-
-    const dLon =
-        toRadians(
-            lon2 - lon1
-        );
-
-
-    const a =
-
-        Math.sin(dLat / 2) ** 2
-
-        +
-
-        Math.cos(
-            toRadians(lat1)
-        )
-
-        *
-
-        Math.cos(
-            toRadians(lat2)
-        )
-
-        *
-
-        Math.sin(dLon / 2) ** 2;
-
-
-    const c =
-
-        2 *
-
-        Math.atan2(
-
-            Math.sqrt(a),
-
-            Math.sqrt(1 - a)
-
-        );
-
-
-    return R * c;
-
-}
-
-
-
-function toRadians(value) {
-
-    return value *
-        Math.PI /
-        180;
-
-}
-
-
-
-/* ==========================================
+/* =====================================================
    TIMER
-========================================== */
-
+===================================================== */
 
 function updateTimer() {
 
@@ -1171,91 +2163,140 @@ function updateTimer() {
         return;
 
 
-    const seconds =
-        (Date.now() - startTime)
-        / 1000;
-
-
     document.getElementById(
         "timer"
     ).innerText =
-        formatTime(seconds);
+        formatTime(
+            getElapsedSeconds()
+        );
 
 }
 
 
 
-/* ==========================================
-   AVERAGE SPEED
-========================================== */
+/* =====================================================
+   ELAPSED TIME
+===================================================== */
+
+function getElapsedSeconds() {
 
 
-function calculateAverageSpeed() {
-
-
-    if (startTime === null)
+    if (!startTime)
         return 0;
 
 
-    const elapsed =
-        (Date.now() - startTime)
-        / 3600000;
+    return (
 
+        Date.now() -
+        startTime -
+        totalPausedTime
 
-    const distanceKm =
-        totalDistance / 1000;
-
-
-    if (elapsed <= 0)
-        return 0;
-
-
-    return distanceKm / elapsed;
+    ) / 1000;
 
 }
 
 
 
-/* ==========================================
-   AVERAGE PACE
-========================================== */
+/* =====================================================
+   PAUSE
+===================================================== */
+
+function togglePause() {
 
 
-function updateAveragePace() {
-
-
-    const distanceKm =
-        totalDistance / 1000;
-
-
-    if (distanceKm <= 0)
+    if (!running)
         return;
 
 
-    const elapsed =
-        (Date.now() - startTime)
-        / 1000;
+    if (!paused) {
+
+        paused = true;
+
+        pausedAt =
+            Date.now();
 
 
-    const secondsPerKm =
-        elapsed / distanceKm;
+        document.getElementById(
+            "state"
+        ).innerText =
+            "Paused";
 
 
-    document.getElementById(
-        "avgPace"
-    ).innerText =
-        formatPace(secondsPerKm);
+        document.getElementById(
+            "pauseButton"
+        ).innerText =
+            "▶ RESUME";
+
+
+        document.getElementById(
+            "gpsText"
+        ).innerText =
+            "PAUSED";
+
+
+        document.getElementById(
+            "gpsDot"
+        ).className =
+            "gps-dot warning";
+
+    }
+
+    else {
+
+        paused = false;
+
+
+        totalPausedTime +=
+            Date.now() -
+            pausedAt;
+
+
+        pausedAt = null;
+
+
+        /*
+            Reset GPS reference
+            to prevent a huge
+            movement being counted.
+        */
+
+        lastPoint = null;
+
+
+        document.getElementById(
+            "state"
+        ).innerText =
+            "Running";
+
+
+        document.getElementById(
+            "pauseButton"
+        ).innerText =
+            "❚❚ PAUSE";
+
+
+        document.getElementById(
+            "gpsText"
+        ).innerText =
+            "GPS ACTIVE";
+
+
+        document.getElementById(
+            "gpsDot"
+        ).className =
+            "gps-dot active";
+
+    }
 
 }
 
 
 
-/* ==========================================
-   STOP
-========================================== */
+/* =====================================================
+   FINISH
+===================================================== */
 
-
-function stopRun() {
+async function finishRun() {
 
 
     if (!running)
@@ -1265,45 +2306,53 @@ function stopRun() {
     running = false;
 
 
-    /*
-        Stop GPS
-    */
+    clearInterval(
+        timerInterval
+    );
 
-    if (watchID !== null) {
+
+    if (gpsWatch !== null) {
 
         navigator.geolocation
             .clearWatch(
-                watchID
+                gpsWatch
             );
 
-        watchID = null;
+        gpsWatch = null;
 
     }
 
 
     /*
-        Stop timer
+        Release Wake Lock.
     */
 
-    clearInterval(
-        timerID
-    );
+    if (wakeLock) {
+
+        try {
+
+            await wakeLock.release();
+
+        }
+
+        catch(e) {}
+
+        wakeLock = null;
+
+    }
 
 
     const elapsed =
-        (Date.now() - startTime)
-        / 1000;
+        getElapsedSeconds();
 
 
     const distanceKm =
         totalDistance / 1000;
 
 
-    /*
-        Average speed
-    */
-
     let averageSpeed = 0;
+
+    let averagePace = 0;
 
 
     if (elapsed > 0) {
@@ -1315,45 +2364,17 @@ function stopRun() {
     }
 
 
-    /*
-        Average pace
-    */
-
-    let averagePace =
-        "--:--";
-
-
     if (distanceKm > 0) {
 
         averagePace =
-            formatPace(
-                elapsed / distanceKm
-            );
+            elapsed /
+            distanceKm;
 
     }
 
 
     /*
-        Last 100m pace
-    */
-
-    let pace100 =
-        "--:--";
-
-
-    if (averageSpeed > 0) {
-
-        pace100 =
-            formatPace(
-                360 /
-                averageSpeed
-            );
-
-    }
-
-
-    /*
-        Summary
+        Final UI.
     */
 
     document.getElementById(
@@ -1379,23 +2400,52 @@ function stopRun() {
     document.getElementById(
         "finalPace"
     ).innerText =
-        averagePace;
+        averagePace
+        ? formatPace(averagePace)
+        : "--:--";
 
 
     document.getElementById(
-        "final100"
+        "finalLaps"
     ).innerText =
-        pace100;
-
-
-    document.getElementById(
-        "summary"
-    ).style.display =
-        "block";
+        laps.length;
 
 
     /*
-        UI
+        Best lap.
+    */
+
+    if (laps.length > 0) {
+
+        const best =
+            Math.min(
+                ...laps.map(
+                    lap => lap.time
+                )
+            );
+
+
+        document.getElementById(
+            "bestLap"
+        ).innerText =
+            formatTimeShort(
+                best
+            );
+
+    }
+
+    else {
+
+        document.getElementById(
+            "bestLap"
+        ).innerText =
+            "--:--";
+
+    }
+
+
+    /*
+        UI.
     */
 
     document.getElementById(
@@ -1405,30 +2455,186 @@ function stopRun() {
 
 
     document.getElementById(
+        "pauseButton"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
         "stopButton"
     ).style.display =
         "none";
 
 
     document.getElementById(
-        "status"
+        "state"
     ).innerText =
         "Finished";
 
 
     document.getElementById(
-        "gpsStatus"
+        "gpsText"
     ).innerText =
-        "OFF";
+        "GPS OFF";
+
+
+    document.getElementById(
+        "gpsDot"
+    ).className =
+        "gps-dot";
+
+
+    document.getElementById(
+        "summary"
+    ).style.display =
+        "block";
+
+
+    /*
+        Save run locally.
+    */
+
+    saveRun({
+
+        date:
+            new Date().toISOString(),
+
+        distance:
+            distanceKm,
+
+        time:
+            elapsed,
+
+        averageSpeed:
+            averageSpeed,
+
+        averagePace:
+            averagePace,
+
+        laps:
+            laps
+
+    });
 
 }
 
 
 
-/* ==========================================
-   TIME FORMAT
-========================================== */
+/* =====================================================
+   SAVE RUN
+===================================================== */
 
+function saveRun(run) {
+
+
+    try {
+
+        localStorage.setItem(
+
+            "lastRun",
+
+            JSON.stringify(run)
+
+        );
+
+    }
+
+    catch(e) {
+
+        console.log(
+            "Could not save run."
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   DISTANCE CALCULATION
+===================================================== */
+
+function distanceBetween(
+    lat1,
+    lon1,
+    lat2,
+    lon2
+) {
+
+
+    const R =
+        6371000;
+
+
+    const dLat =
+        toRadians(
+            lat2 - lat1
+        );
+
+
+    const dLon =
+        toRadians(
+            lon2 - lon1
+        );
+
+
+    const a =
+
+        Math.sin(
+            dLat / 2
+        ) ** 2
+
+        +
+
+        Math.cos(
+            toRadians(lat1)
+        )
+
+        *
+
+        Math.cos(
+            toRadians(lat2)
+        )
+
+        *
+
+        Math.sin(
+            dLon / 2
+        ) ** 2;
+
+
+    const c =
+
+        2 *
+
+        Math.atan2(
+
+            Math.sqrt(a),
+
+            Math.sqrt(1 - a)
+
+        );
+
+
+    return R * c;
+
+}
+
+
+function toRadians(value) {
+
+    return value *
+        Math.PI /
+        180;
+
+}
+
+
+
+/* =====================================================
+   TIME
+===================================================== */
 
 function formatTime(seconds) {
 
@@ -1461,16 +2667,16 @@ function formatTime(seconds) {
         String(hours)
             .padStart(2, "0")
 
-        +
+        + ":"
 
-        ":" +
+        +
 
         String(minutes)
             .padStart(2, "0")
 
-        +
+        + ":"
 
-        ":" +
+        +
 
         String(secs)
             .padStart(2, "0")
@@ -1481,10 +2687,48 @@ function formatTime(seconds) {
 
 
 
-/* ==========================================
-   PACE FORMAT
-========================================== */
+/* =====================================================
+   SHORT TIME
+===================================================== */
 
+function formatTimeShort(seconds) {
+
+
+    seconds =
+        Math.round(seconds);
+
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+
+    const secs =
+        seconds % 60;
+
+
+    return (
+
+        String(minutes)
+            .padStart(2, "0")
+
+        + ":"
+
+        +
+
+        String(secs)
+            .padStart(2, "0")
+
+    );
+
+}
+
+
+
+/* =====================================================
+   PACE
+===================================================== */
 
 function formatPace(seconds) {
 
@@ -1516,9 +2760,9 @@ function formatPace(seconds) {
         String(minutes)
             .padStart(2, "0")
 
-        +
+        + ":"
 
-        ":" +
+        +
 
         String(secs)
             .padStart(2, "0")
@@ -1529,52 +2773,148 @@ function formatPace(seconds) {
 
 
 
-/* ==========================================
+/* =====================================================
+   WAKE LOCK
+===================================================== */
+
+async function requestWakeLock() {
+
+
+    if (
+        "wakeLock" in navigator
+    ) {
+
+        try {
+
+            wakeLock =
+                await navigator.wakeLock
+                    .request("screen");
+
+        }
+
+        catch(error) {
+
+            console.log(
+                "Wake Lock unavailable."
+            );
+
+        }
+
+    }
+
+}
+
+
+
+/* =====================================================
    GPS ERROR
-========================================== */
+===================================================== */
 
-
-function handleGPSError(error) {
-
-
-    document.getElementById(
-        "status"
-    ).innerText =
-        "GPS Error";
+function gpsError(error) {
 
 
     document.getElementById(
-        "gpsStatus"
+        "gpsText"
     ).innerText =
-        "ERROR";
+        "GPS ERROR";
+
+
+    document.getElementById(
+        "gpsDot"
+    ).className =
+        "gps-dot warning";
 
 
     if (error.code === 1) {
 
         alert(
-            "Location permission was denied. " +
-            "Please allow location access in your browser settings."
+            "Location permission was denied.\n\n" +
+            "Please allow location access for RunTrack " +
+            "in your browser settings."
         );
 
     }
+
 
     else if (error.code === 2) {
 
         alert(
-            "Your location could not be determined."
+            "GPS location could not be determined."
         );
 
     }
 
+
     else if (error.code === 3) {
 
         alert(
-            "GPS request timed out."
+            "GPS request timed out. " +
+            "Please try again outside."
         );
 
     }
 
 }
+
+
+
+/* =====================================================
+   RESET MAP FOR NEW RUN
+===================================================== */
+
+function resetMap() {
+
+
+    route = [];
+
+
+    if (routeLine) {
+
+        map.removeLayer(
+            routeLine
+        );
+
+        routeLine = null;
+
+    }
+
+
+    if (marker) {
+
+        map.removeLayer(
+            marker
+        );
+
+        marker = null;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   PAGE VISIBILITY
+===================================================== */
+
+document.addEventListener(
+    "visibilitychange",
+    async () => {
+
+
+        if (
+            document.visibilityState ===
+            "visible" &&
+            running &&
+            !paused
+        ) {
+
+            await requestWakeLock();
+
+        }
+
+    }
+);
 
 
 </script>
