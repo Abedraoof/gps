@@ -1,77 +1,87 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-                <meta name="google-site-verification" content="4j5ULNTNE2ixVPpcLIiCN8Q4c06Ce2WU94GCSvMtyeU" />
+                        <meta name="google-site-verification" content="4j5ULNTNE2ixVPpcLIiCN8Q4c06Ce2WU94GCSvMtyeU" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#080c14">
-<title>RUNTRACK PRO V6</title>
+<meta name="theme-color" content="#030712">
+<title>RUNTRACK ULTIMATE V7</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
 :root {
-  --bg-dark: #080c14;
-  --card-bg: #101726;
-  --card-border: #1e293b;
-  --accent-green: #10b981;
-  --accent-glow: rgba(16, 185, 129, 0.25);
-  --accent-warn: #f59e0b;
-  --accent-danger: #ef4444;
-  --text-main: #f8fafc;
-  --text-muted: #64748b;
+  --bg-deep: #030712;
+  --card-glass: rgba(17, 24, 39, 0.7);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --neon-green: #00ff8e;
+  --neon-cyan: #00f0ff;
+  --neon-amber: #ffb703;
+  --neon-red: #ff2a6d;
+  --text-main: #f9fafb;
+  --text-sub: #9ca3af;
 }
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
-body{background:var(--bg-dark);color:var(--text-main);font-family:system-ui,-apple-system,sans-serif;padding:12px;direction:rtl}
-.app{max-width:850px;margin:auto;display:flex;flex-direction:column;gap:10px}
+body{background:var(--bg-deep);color:var(--text-main);font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;padding:12px;direction:rtl;overflow-x:hidden}
+.app{max-width:900px;margin:auto;display:flex;flex-direction:column;gap:12px}
 
-header{height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 6px}
-.logo{font-size:20px;font-weight:900;letter-spacing:-0.5px;display:flex;align-items:center;gap:6px}
-.logo span{color:var(--accent-green)}
-.gps-pill{font-size:11px;font-weight:700;display:flex;align-items:center;gap:8px;background:#131c2e;padding:6px 12px;border-radius:20px;border:1px solid var(--card-border)}
-.dot{width:8px;height:8px;border-radius:50%;background:#475569;transition:all 0.3s}
-.dot.good{background:var(--accent-green);box-shadow:0 0 10px var(--accent-green)}
-.dot.warn{background:var(--accent-warn)}
-.dot.bad{background:var(--accent-danger)}
+header{display:flex;align-items:center;justify-content:space-between;padding:4px 6px}
+.logo{font-size:22px;font-weight:900;letter-spacing:-0.5px;display:flex;align-items:center;gap:6px}
+.logo span{color:var(--neon-green);text-shadow:0 0 12px rgba(0,255,142,0.4)}
+.status-pill{font-size:11px;font-weight:700;display:flex;align-items:center;gap:8px;background:rgba(31,41,55,0.6);padding:6px 14px;border-radius:30px;border:1px solid var(--border-glass);backdrop-filter:blur(10px)}
+.dot{width:8px;height:8px;border-radius:50%;background:#4b5563;transition:all 0.3s}
+.dot.good{background:var(--neon-green);box-shadow:0 0 10px var(--neon-green)}
+.dot.hybrid{background:var(--neon-cyan);box-shadow:0 0 10px var(--neon-cyan)}
+.dot.warn{background:var(--neon-amber)}
 
-.hero{background:linear-gradient(160deg,#131d30,#0b121e);border:1px solid var(--card-border);border-radius:24px;padding:20px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 60%);pointer-events:none}
-.state{font-size:11px;color:var(--text-muted);font-weight:800;letter-spacing:1px}
-.time{font-size:48px;font-weight:900;letter-spacing:-1px;margin:4px 0;font-variant-numeric:tabular-nums}
-.dist{font-size:68px;line-height:1;font-weight:900;letter-spacing:-2px;color:#fff}
-.dist small{font-size:16px;color:var(--text-muted);margin-right:4px}
-.pace-box{margin-top:10px;font-size:12px;color:var(--text-muted)}
-.pace-box b{font-size:24px;color:var(--accent-green);margin-left:4px}
+/* Hero Header & Live Avatar */
+.hero{background:linear-gradient(135deg,rgba(17,24,39,0.9),rgba(3,7,18,0.95));border:1px solid var(--border-glass);border-radius:28px;padding:24px 16px;text-align:center;position:relative;overflow:hidden;backdrop-filter:blur(16px);box-shadow:0 20px 40px rgba(0,0,0,0.6)}
+.hero-bg-glow{position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:250px;height:250px;background:radial-gradient(circle,rgba(0,255,142,0.15) 0%,transparent 70%);pointer-events:none}
+.state{font-size:11px;color:var(--neon-cyan);font-weight:800;letter-spacing:2px;text-transform:uppercase}
 
-.actions{display:flex;justify-content:center;gap:10px;margin-top:16px}
-.btn{border:0;border-radius:40px;padding:12px 28px;font-size:14px;font-weight:800;cursor:pointer;transition:transform 0.1s,opacity 0.2s}
-.btn:active{transform:scale(0.96)}
-.btn-start{background:var(--accent-green);color:#022c22;box-shadow:0 4px 15px var(--accent-glow)}
-.btn-pause{background:#1e293b;color:#fff;display:none}
-.btn-finish{background:var(--accent-danger);color:#fff;display:none}
+/* Live Runner Canvas Animation */
+#runnerCanvas{width:100px;height:70px;margin:0 auto;display:block}
 
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:12px;text-align:center}
-.card .label{font-size:10px;color:var(--text-muted);font-weight:800}
-.card .val{font-size:20px;font-weight:800;margin-top:4px;font-variant-numeric:tabular-nums}
-.card .unit{font-size:9px;color:var(--text-muted)}
+.time{font-size:46px;font-weight:900;letter-spacing:-1px;margin:2px 0;font-variant-numeric:tabular-nums;text-shadow:0 0 20px rgba(255,255,255,0.1)}
+.dist{font-size:72px;line-height:0.95;font-weight:900;letter-spacing:-2px;color:#fff;margin:8px 0}
+.dist small{font-size:18px;color:var(--text-sub);margin-right:6px}
+.pace-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,255,142,0.08);border:1px solid rgba(0,255,142,0.2);padding:6px 16px;border-radius:20px;color:var(--neon-green);font-size:13px;font-weight:800}
 
-.panel{background:var(--card-bg);border:1px solid var(--card-border);border-radius:18px;padding:14px}
-.panelhead{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:800;margin-bottom:10px}
+.actions{display:flex;justify-content:center;gap:12px;margin-top:20px}
+.btn{border:0;border-radius:50px;padding:14px 32px;font-size:15px;font-weight:800;cursor:pointer;transition:all 0.2s cubic-bezier(0.4,0,0.2,1)}
+.btn:active{transform:scale(0.95)}
+.btn-start{background:linear-gradient(135deg,var(--neon-green),#059669);color:#022c22;box-shadow:0 4px 20px rgba(0,255,142,0.35)}
+.btn-pause{background:#1f2937;color:#fff;border:1px solid var(--border-glass);display:none}
+.btn-finish{background:linear-gradient(135deg,var(--neon-red),#dc2626);color:#fff;box-shadow:0 4px 20px rgba(255,42,109,0.35);display:none}
 
-#map{height:320px;border-radius:18px;overflow:hidden;border:1px solid var(--card-border)}
-.leaflet-tile{filter:brightness(0.6) invert(1) contrast(3) hue-rotate(200deg) saturate(0.3) brightness(0.7)}
+/* Grid Dashboard */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card{background:var(--card-glass);border:1px solid var(--border-glass);border-radius:20px;padding:14px 10px;text-align:center;backdrop-filter:blur(12px)}
+.card .label{font-size:10px;color:var(--text-sub);font-weight:800;letter-spacing:0.5px}
+.card .val{font-size:22px;font-weight:900;margin-top:4px;font-variant-numeric:tabular-nums;color:#fff}
+.card .unit{font-size:9px;color:var(--text-sub);margin-top:2px}
 
-.progress-bar{height:8px;background:#1e293b;border-radius:10px;overflow:hidden;margin-top:8px}
-.progress-fill{height:100%;width:0%;background:var(--accent-green);transition:width 0.2s}
+/* Panels */
+.panel{background:var(--card-glass);border:1px solid var(--border-glass);border-radius:22px;padding:16px;backdrop-filter:blur(12px)}
+.panelhead{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;margin-bottom:12px}
 
-canvas#paceChart{width:100%;height:80px;display:block}
+#map{height:300px;border-radius:20px;overflow:hidden;border:1px solid var(--border-glass)}
 
-.history-item{display:grid;grid-template-columns:1fr 1fr 1fr;padding:10px 0;border-bottom:1px solid var(--card-border);font-size:11px}
+/* Cadence Gauge */
+.cadence-bar{height:10px;background:#111827;border-radius:10px;overflow:hidden;position:relative;margin-top:8px}
+.cadence-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--neon-cyan),var(--neon-green));transition:width 0.3s}
+.cadence-target{position:absolute;left:60%;top:0;bottom:0;width:20%;background:rgba(255,255,255,0.15);border-left:1px dashed var(--neon-green);border-right:1px dashed var(--neon-green)}
+
+/* Toast Notifications for Badges */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(17,24,39,0.95);border:1px solid var(--neon-green);box-shadow:0 10px 30px rgba(0,255,142,0.3);padding:12px 24px;border-radius:30px;display:flex;align-items:center;gap:10px;z-index:9999;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+canvas#paceChart{width:100%;height:90px;display:block}
+.history-item{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;padding:12px 0;border-bottom:1px solid var(--border-glass);font-size:11px;text-align:center}
 
 @media(max-width:600px){
   .grid{grid-template-columns:repeat(2,1fr)}
-  .dist{font-size:56px}
-  .time{font-size:40px}
+  .dist{font-size:58px}
+  .time{font-size:38px}
 }
 </style>
 </head>
@@ -79,21 +89,24 @@ canvas#paceChart{width:100%;height:80px;display:block}
 
 <div class="app">
   <header>
-    <div class="logo">RUN<span>TRACK</span> <small style="font-size:10px;color:var(--text-muted)">PRO V6</small></div>
-    <div class="gps-pill">
+    <div class="logo">RUN<span>TRACK</span> <small style="font-size:10px;color:var(--text-sub)">V7 ULTIMATE</small></div>
+    <div class="status-pill">
       <div id="gpsDot" class="dot"></div>
-      <span id="gpsText">في انتظار الموقع</span>
+      <span id="gpsText">تحديد الموقع...</span>
     </div>
   </header>
 
   <section class="hero">
-    <div id="state" class="state">جاهز للبدء</div>
+    <div class="hero-bg-glow"></div>
+    <div id="state" class="state">جاهز للانطلاق</div>
+    <canvas id="runnerCanvas"></canvas>
     <div id="time" class="time">00:00:00</div>
     <div class="dist"><span id="distance">0.000</span><small>كم</small></div>
-    <div class="pace-box">السرعة الحالية: <b id="currentPace">--:--</b> /كم</div>
+    <div class="pace-badge">⚡ السرعة اللحظية: <span id="currentPace">--:--</span> /كم</div>
+    
     <div class="actions">
-      <button id="startBtn" class="btn btn-start" onclick="startRun()">▶ بدء التمرين</button>
-      <button id="pauseBtn" class="btn btn-pause" onclick="togglePause()">Ⅱ إيقاف مؤقت</button>
+      <button id="startBtn" class="btn btn-start" onclick="startRun()">▶ انطلاق</button>
+      <button id="pauseBtn" class="btn btn-pause" onclick="togglePause()">Ⅱ إيقاف</button>
       <button id="finishBtn" class="btn btn-finish" onclick="finishRun()">■ إنهاء</button>
     </div>
   </section>
@@ -101,46 +114,58 @@ canvas#paceChart{width:100%;height:80px;display:block}
   <section class="grid">
     <div class="card"><div class="label">السرعة</div><div id="speed" class="val">0.0</div><div class="unit">كم/ساعة</div></div>
     <div class="card"><div class="label">معدل الوتيرة</div><div id="avgPace" class="val">--:--</div><div class="unit">دقيقة/كم</div></div>
-    <div class="card"><div class="label">دقة الـ GPS</div><div id="accuracy" class="val">--</div><div class="unit">أمتار</div></div>
-    <div class="card"><div class="label">الخطوات المقدرة</div><div id="steps" class="val">0</div><div class="unit">خطوة</div></div>
+    <div class="card"><div class="label">الإيقاع (SPM)</div><div id="spm" class="val">0</div><div class="unit">خطوة/دقيقة</div></div>
+    <div class="card"><div class="label">السعرات</div><div id="calories" class="val">0</div><div class="unit">دورة حرارية</div></div>
+    <div class="card"><div class="label">إجمالي الخطوات</div><div id="steps" class="val">0</div><div class="unit">خطوة</div></div>
+    <div class="card"><div class="label">دقة GPS</div><div id="accuracy" class="val">--</div><div class="unit">أمتار</div></div>
+    <div class="card"><div class="label">نمط التتبع</div><div id="trackingMode" class="val" style="font-size:14px;color:var(--neon-green)">HYBRID</div><div class="unit">ذكي</div></div>
+    <div class="card"><div class="label">المسافة بالدقة</div><div id="metersExact" class="val">0</div><div class="unit">أمتار صافية</div></div>
+  </section>
+
+  <section class="panel">
+    <div class="panelhead">
+      <span>🏃 مؤشر إيقاع الخطوات (Cadence Target)</span>
+      <span id="cadenceStatus" style="color:var(--neon-cyan)">مثالي (160-180)</span>
+    </div>
+    <div class="cadence-bar">
+      <div class="cadence-target"></div>
+      <div id="cadenceFill" class="cadence-fill"></div>
+    </div>
   </section>
 
   <div id="map"></div>
 
   <section class="panel">
-    <div class="panelhead">
-      <span>🎯 المقطع الحالي (400m)</span>
-      <span id="remaining" style="color:var(--accent-green)">400m</span>
-    </div>
-    <div class="progress-bar"><div id="bar" class="progress-fill"></div></div>
-  </section>
-
-  <section class="panel">
-    <div class="panelhead"><span>📊 المخطط اللحظي للوتيرة</span></div>
+    <div class="panelhead"><span>📊 الرسم البياني اللحظي للسرعة والوتيرة</span></div>
     <canvas id="paceChart"></canvas>
   </section>
 
   <section class="panel">
-    <div class="panelhead"><span>🏆 السجل الأخير</span></div>
-    <div id="history"><div style="color:var(--text-muted);font-size:12px;text-align:center">لا يوجد تمارين مسجلة بعد.</div></div>
+    <div class="panelhead"><span>🏆 سجل التمارين والأرقام القياسية</span></div>
+    <div id="history"><div style="color:var(--text-sub);font-size:12px;text-align:center">لا يوجد تمارين مسجلة بعد.</div></div>
   </section>
+</div>
+
+<!-- Toast Popup Notification for Achievements -->
+<div id="toast" class="toast">
+  <span style="font-size:24px">🏅</span>
+  <div>
+    <div id="toastTitle" style="font-weight:900;color:#fff;font-size:14px">إنجاز جديد!</div>
+    <div id="toastDesc" style="font-size:11px;color:var(--text-sub)">لقد قطعت الكيلومتر الأول بنجاح.</div>
+  </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// --- خوارزمية مرشح كالمان لـ GPS ---
+// --- Kalman Filter ---
 class KalmanFilter2D {
-  constructor(processNoise = 3) {
+  constructor(processNoise = 1.5) {
     this.processNoise = processNoise;
-    this.lat = null;
-    this.lng = null;
-    this.variance = -1;
+    this.lat = null; this.lng = null; this.variance = -1;
   }
-  process(lat, lng, accuracy, timestamp) {
+  process(lat, lng, accuracy) {
     if (this.variance < 0) {
-      this.lat = lat;
-      this.lng = lng;
-      this.variance = accuracy * accuracy;
+      this.lat = lat; this.lng = lng; this.variance = accuracy * accuracy;
       return { lat, lng };
     }
     this.variance += this.processNoise;
@@ -152,195 +177,307 @@ class KalmanFilter2D {
   }
 }
 
-// --- الحالة العامة والتكوين ---
-const kalman = new KalmanFilter2D(2);
-let running = false, paused = false, watchId = null, timer = null;
+// --- App State ---
+const kalman = new KalmanFilter2D(1.5);
+let running = false, paused = false, watchId = null, timer = null, animFrame = null;
 let startTime = 0, pausedTotal = 0, pauseAt = 0;
-let lastPoint = null, totalDistance = 0, residualDistance = 0, lapDist = 0;
+let lastPoint = null, totalDistanceMeters = 0;
 let route = [], line = null, marker = null;
-let paceHistory = [], stepCount = 0;
+let paceHistory = [], stepTimes = [], totalSteps = 0;
+let lastKmAnnounced = 0;
 
+// Dark Leaflet Map Setup
 const map = L.map('map', { zoomControl: false, attributionControl: false }).setView([31.7683, 35.2137], 16);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 20 }).addTo(map);
 
-// --- إدارة الحساسات والخطوات عند ضعف الـ GPS ---
+// --- Live Runner Avatar Canvas Animation ---
+const canvasRunner = document.getElementById('runnerCanvas');
+const ctxRunner = canvasRunner.getContext('2d');
+let animLegAngle = 0;
+
+function drawRunner(speedKmh = 0) {
+  canvasRunner.width = canvasRunner.offsetWidth;
+  canvasRunner.height = canvasRunner.offsetHeight;
+  ctxRunner.clearRect(0, 0, canvasRunner.width, canvasRunner.height);
+  
+  const cx = canvasRunner.width / 2;
+  const cy = canvasRunner.height / 2;
+  
+  if (running && !paused && speedKmh > 0.5) {
+    animLegAngle += Math.min(0.4, 0.08 + speedKmh * 0.015);
+  }
+  
+  const leg1 = Math.sin(animLegAngle) * 18;
+  const leg2 = -Math.sin(animLegAngle) * 18;
+  
+  ctxRunner.strokeStyle = '#00ff8e';
+  ctxRunner.lineWidth = 3.5;
+  ctxRunner.lineCap = 'round';
+  
+  // Head
+  ctxRunner.beginPath(); ctxRunner.arc(cx, cy - 18, 5, 0, Math.PI * 2); ctxRunner.stroke();
+  // Body
+  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy - 13); ctxRunner.lineTo(cx, cy + 5); ctxRunner.stroke();
+  // Legs
+  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy + 5); ctxRunner.lineTo(cx + leg1, cy + 22); ctxRunner.stroke();
+  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy + 5); ctxRunner.lineTo(cx + leg2, cy + 22); ctxRunner.stroke();
+  // Arms
+  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy - 8); ctxRunner.lineTo(cx - leg1*0.8, cy + 4); ctxRunner.stroke();
+  ctxRunner.beginPath(); ctxRunner.moveTo(cx, cy - 8); ctxRunner.lineTo(cx + leg1*0.8, cy + 4); ctxRunner.stroke();
+  
+  if (running && !paused) animFrame = requestAnimationFrame(() => drawRunner(speedKmh));
+}
+drawRunner(0);
+
+// --- Motion & Step Detector Engine ---
 if (window.DeviceMotionEvent) {
+  let lastAccelMag = 0;
   window.addEventListener('devicemotion', (e) => {
     if (!running || paused) return;
     const acc = e.accelerationIncludingGravity;
     if (acc) {
       const mag = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
-      if (mag > 12.2) { stepCount++; document.getElementById('steps').innerText = stepCount; }
+      const delta = mag - lastAccelMag;
+      lastAccelMag = mag;
+      
+      // Step Peak Detection
+      if (delta > 2.8) {
+        const now = Date.now();
+        if (!stepTimes.length || (now - stepTimes[stepTimes.length - 1]) > 230) {
+          totalSteps++;
+          stepTimes.push(now);
+          document.getElementById('steps').innerText = totalSteps;
+          
+          // Dead-Reckoning Fallback: Add distance if GPS drops
+          if (!lastPoint || (Date.now() - lastPoint.time) > 3500) {
+            const dynamicStepLength = 0.75; // meters per step
+            totalDistanceMeters += dynamicStepLength;
+            updateMetrics(3.6); // Estimated 3.6 km/h pace fallback
+            document.getElementById('trackingMode').innerText = 'PEDO';
+            document.getElementById('trackingMode').style.color = 'var(--neon-cyan)';
+          }
+        }
+      }
     }
   });
 }
 
+function calculateSPM() {
+  const now = Date.now();
+  stepTimes = stepTimes.filter(t => (now - t) <= 10000); // last 10s
+  const spm = Math.round((stepTimes.length / 10) * 60);
+  document.getElementById('spm').innerText = spm;
+  
+  // Cadence Bar
+  const pct = Math.min(100, (spm / 200) * 100);
+  document.getElementById('cadenceFill').style.width = pct + '%';
+  
+  const status = document.getElementById('cadenceStatus');
+  if (spm >= 160 && spm <= 180) { status.innerText = 'مثالي (160-180)'; status.style.color = 'var(--neon-green)'; }
+  else if (spm > 180) { status.innerText = 'سريع جداً'; status.style.color = 'var(--neon-amber)'; }
+  else { status.innerText = 'منخفض'; status.style.color = 'var(--neon-cyan)'; }
+}
+
+// --- GPS Processing ---
 function startRun() {
-  if (!navigator.geolocation) return alert('الـ GPS غير مدعوم في هذا الجهاز.');
+  if (!navigator.geolocation) return alert('الـ GPS غير مدعوم.');
   navigator.geolocation.getCurrentPosition(p => {
     resetRun();
     running = true;
     startTime = Date.now();
     watchId = navigator.geolocation.watchPosition(processGPS, gpsError, {
-      enableHighAccuracy: true,
-      maximumAge: 1000,
-      timeout: 10000
+      enableHighAccuracy: true, maximumAge: 0, timeout: 5000
     });
     timer = setInterval(tick, 200);
+    drawRunner(0);
+    
     document.getElementById('startBtn').style.display = 'none';
     document.getElementById('pauseBtn').style.display = 'inline-block';
     document.getElementById('finishBtn').style.display = 'inline-block';
-    document.getElementById('state').innerText = 'جاري الجري...';
+    document.getElementById('state').innerText = 'جاري الجري والتتبع...';
+    speak('تم بدء التمرين. حظاً موفقاً!');
   }, gpsError, { enableHighAccuracy: true });
 }
 
 function processGPS(p) {
   if (!running || paused) return;
-  const coords = p.coords;
-  const rawLat = coords.latitude, rawLng = coords.longitude;
-  const rawAcc = coords.accuracy || 30;
+  const c = p.coords;
+  const rawAcc = c.accuracy || 20;
   const now = p.timestamp || Date.now();
-
+  
   updateGPSUI(rawAcc);
-
-  // تصفية الإحداثيات باستخدام كالمان
-  const filtered = kalman.process(rawLat, rawLng, rawAcc, now);
+  
+  const filtered = kalman.process(c.latitude, c.longitude, rawAcc);
   const lat = filtered.lat, lng = filtered.lng;
-
+  
   if (!lastPoint) {
     lastPoint = { lat, lng, time: now };
-    drawMap(lat, lng);
+    drawMap(lat, lng, 0);
     return;
   }
-
-  const dt = Math.max(0.5, (now - lastPoint.time) / 1000);
+  
+  const dt = Math.max(0.4, (now - lastPoint.time) / 1000);
   const d = haversine(lastPoint.lat, lastPoint.lng, lat, lng);
-  const speedKmh = (d / dt) * 3.6;
-
-  // استبعاد النطزات غير المنطقية (أسرع من 45 كم/س)
-  if (speedKmh > 45) return;
-
-  // التراكم الدقيق للأمتار الممشية بدون إهمال الكسيرات الصغيرة
-  residualDistance += d;
-  if (residualDistance >= 0.5) { // تجميع الأمتار عند الوصول لـ 0.5 متر
-    totalDistance += residualDistance;
-    lapDist += residualDistance;
-    residualDistance = 0;
+  const speedKmh = (c.speed && c.speed >= 0) ? c.speed * 3.6 : (d / dt) * 3.6;
+  
+  if (speedKmh > 42) return; // Plausibility filter
+  
+  if (d >= 0.3) {
+    totalDistanceMeters += d;
+    lastPoint = { lat, lng, time: now };
+    drawMap(lat, lng, speedKmh);
+    document.getElementById('trackingMode').innerText = 'GPS+HYBRID';
+    document.getElementById('trackingMode').style.color = 'var(--neon-green)';
   }
-
-  lastPoint = { lat, lng, time: now };
-  drawMap(lat, lng);
+  
   updateMetrics(speedKmh);
 }
 
 function updateMetrics(speedKmh) {
-  const km = totalDistance / 1000;
+  const km = totalDistanceMeters / 1000;
   const elapsed = getElapsedSec();
-
+  
   document.getElementById('distance').innerText = km.toFixed(3);
+  document.getElementById('metersExact').innerText = Math.round(totalDistanceMeters);
   document.getElementById('speed').innerText = speedKmh.toFixed(1);
-
+  
+  // Calories (Estimated: ~60 kcal/km)
+  const cals = Math.round(km * 62);
+  document.getElementById('calories').innerText = cals;
+  
   if (km > 0.005) {
-    const avgPaceSec = elapsed / km;
-    document.getElementById('avgPace').innerText = formatPace(avgPaceSec);
+    const avgPace = elapsed / km;
+    document.getElementById('avgPace').innerText = formatPace(avgPace);
   }
-
+  
   if (speedKmh > 0.5) {
-    const currentPaceSec = 3600 / speedKmh;
-    document.getElementById('currentPace').innerText = formatPace(currentPaceSec);
-    paceHistory.push(currentPaceSec);
-    if (paceHistory.length > 30) paceHistory.shift();
+    const curPace = 3600 / speedKmh;
+    document.getElementById('currentPace').innerText = formatPace(curPace);
+    paceHistory.push(curPace);
+    if (paceHistory.length > 35) paceHistory.shift();
     drawCanvasChart();
+    drawRunner(speedKmh);
   } else {
     document.getElementById('currentPace').innerText = '--:--';
   }
-
-  // تحديث شريط الـ 400 متر
-  const currentLap = lapDist % 400;
-  document.getElementById('bar').style.width = (currentLap / 400 * 100) + '%';
-  document.getElementById('remaining').innerText = Math.round(400 - currentLap) + 'm';
+  
+  calculateSPM();
+  checkAchievements(km);
 }
 
-function togglePause() {
-  if (!running) return;
-  if (!paused) {
-    paused = true;
-    pauseAt = Date.now();
-    document.getElementById('pauseBtn').innerText = '▶ استئناف';
-    document.getElementById('state').innerText = 'متوقف مؤقتاً';
-  } else {
-    paused = false;
-    pausedTotal += (Date.now() - pauseAt);
-    lastPoint = null;
-    document.getElementById('pauseBtn').innerText = 'Ⅱ إيقاف مؤقت';
-    document.getElementById('state').innerText = 'جاري الجري...';
+// --- Voice Audio Coach ---
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ar-SA'; u.rate = 1.05;
+    window.speechSynthesis.speak(u);
   }
 }
 
-function finishRun() {
-  if (!running) return;
-  running = false;
-  clearInterval(timer);
-  if (watchId) navigator.geolocation.clearWatch(watchId);
-
-  const elapsed = getElapsedSec();
-  const km = totalDistance / 1000;
-  const avgPace = km > 0 ? elapsed / km : 0;
-
-  saveRun({ date: new Date().toLocaleDateString('ar-EG'), dist: km, time: elapsed, pace: avgPace });
-
-  document.getElementById('state').innerText = 'اكتمل التمرين';
-  document.getElementById('startBtn').style.display = 'inline-block';
-  document.getElementById('pauseBtn').style.display = 'none';
-  document.getElementById('finishBtn').style.display = 'none';
-  loadHistory();
+function checkAchievements(km) {
+  const currentKmFloor = Math.floor(km);
+  if (currentKmFloor > lastKmAnnounced && currentKmFloor >= 1) {
+    lastKmAnnounced = currentKmFloor;
+    showToast('إنجاز مميز!', `أكملت ${currentKmFloor} كم بنجاح!`);
+    speak(`أكملت ${currentKmFloor} كيلومتر. واصل التقدم!`);
+  }
 }
 
-// --- رسم الخريطة البياني ---
-function drawMap(lat, lng) {
+function showToast(title, desc) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastTitle').innerText = title;
+  document.getElementById('toastDesc').innerText = desc;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+// --- Map Heatmap Polyline ---
+function drawMap(lat, lng, speed) {
   route.push([lat, lng]);
+  const color = speed > 12 ? 'var(--neon-green)' : speed > 6 ? 'var(--neon-cyan)' : 'var(--neon-amber)';
+  
   if (!marker) {
-    marker = L.circleMarker([lat, lng], { radius: 7, color: '#fff', weight: 2, fillColor: '#10b981', fillOpacity: 1 }).addTo(map);
+    marker = L.circleMarker([lat, lng], { radius: 8, color: '#fff', weight: 2, fillColor: '#00ff8e', fillOpacity: 1 }).addTo(map);
   } else {
     marker.setLatLng([lat, lng]);
   }
+  
   if (!line) {
-    line = L.polyline(route, { color: '#10b981', weight: 5, opacity: 0.8 }).addTo(map);
+    line = L.polyline(route, { color: '#00ff8e', weight: 5, opacity: 0.9 }).addTo(map);
   } else {
     line.setLatLngs(route);
   }
   map.setView([lat, lng], 17, { animate: false });
 }
 
+// --- Smooth Canvas Pace Chart ---
 function drawCanvasChart() {
   const canvas = document.getElementById('paceChart');
   const ctx = canvas.getContext('2d');
   canvas.width = canvas.offsetWidth;
   canvas.height = canvas.offsetHeight;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+  
   if (paceHistory.length < 2) return;
-  const min = Math.min(...paceHistory), max = Math.max(...paceHistory);
-  const range = (max - min) || 1;
-
+  const min = Math.min(...paceHistory), max = Math.max(...paceHistory), range = (max - min) || 1;
+  
+  const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  grad.addColorStop(0, 'rgba(0, 255, 142, 0.3)');
+  grad.addColorStop(1, 'rgba(0, 255, 142, 0.0)');
+  
   ctx.beginPath();
-  ctx.strokeStyle = '#10b981';
-  ctx.lineWidth = 2;
-
   paceHistory.forEach((v, i) => {
     const x = (i / (paceHistory.length - 1)) * canvas.width;
-    const y = canvas.height - ((v - min) / range) * (canvas.height - 10) - 5;
+    const y = canvas.height - ((v - min) / range) * (canvas.height - 15) - 8;
     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
   });
-  ctx.stroke();
+  ctx.strokeStyle = '#00ff8e'; ctx.lineWidth = 2.5; ctx.stroke();
+  
+  ctx.lineTo(canvas.width, canvas.height);
+  ctx.lineTo(0, canvas.height);
+  ctx.fillStyle = grad; ctx.fill();
 }
 
-// --- العمليات الحسابية المساعدة ---
+function togglePause() {
+  if (!running) return;
+  if (!paused) {
+    paused = true; pauseAt = Date.now();
+    document.getElementById('pauseBtn').innerText = '▶ استئناف';
+    document.getElementById('state').innerText = 'متوقف مؤقتاً';
+    speak('تم إيقاف التمرين مؤقتاً');
+  } else {
+    paused = false; pausedTotal += (Date.now() - pauseAt); lastPoint = null;
+    document.getElementById('pauseBtn').innerText = 'Ⅱ إيقاف';
+    document.getElementById('state').innerText = 'جاري الجري...';
+    speak('تم استئناف التمرين');
+  }
+}
+
+function finishRun() {
+  if (!running) return;
+  running = false; clearInterval(timer);
+  if (watchId) navigator.geolocation.clearWatch(watchId);
+  
+  const elapsed = getElapsedSec();
+  const km = totalDistanceMeters / 1000;
+  const avgPace = km > 0 ? elapsed / km : 0;
+  
+  saveRun({ date: new Date().toLocaleDateString('ar-EG'), dist: km, time: elapsed, pace: avgPace, steps: totalSteps });
+  
+  document.getElementById('state').innerText = 'اكتمل التمرين 🎉';
+  document.getElementById('startBtn').style.display = 'inline-block';
+  document.getElementById('pauseBtn').style.display = 'none';
+  document.getElementById('finishBtn').style.display = 'none';
+  speak(`تمرين مكتمل! المسافة الإجمالية ${km.toFixed(2)} كيلومتر. عمل رائع!`);
+  loadHistory();
+}
+
+// --- Helpers ---
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371000;
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  const dLat = (lat2 - lat1) * Math.PI / 180, dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLon/2)**2;
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
@@ -364,39 +501,41 @@ function formatPace(s) {
 
 function updateGPSUI(acc) {
   document.getElementById('accuracy').innerText = Math.round(acc);
-  const dot = document.getElementById('gpsDot');
-  const txt = document.getElementById('gpsText');
-  if (acc <= 15) { dot.className = 'dot good'; txt.innerText = 'إشارة ممتازة'; }
-  else if (acc <= 35) { dot.className = 'dot warn'; txt.innerText = 'إشارة متوسطة'; }
-  else { dot.className = 'dot bad'; txt.innerText = 'إشارة ضعيفة'; }
+  const dot = document.getElementById('gpsDot'), txt = document.getElementById('gpsText');
+  if (acc <= 15) { dot.className = 'dot good'; txt.innerText = 'GPS ممتاز'; }
+  else if (acc <= 35) { dot.className = 'dot hybrid'; txt.innerText = 'GPS + خطوات'; }
+  else { dot.className = 'dot warn'; txt.innerText = 'ضعيف (وضع الخطوات)'; }
 }
 
-function gpsError() { document.getElementById('gpsText').innerText = 'خطأ في الـ GPS'; }
+function gpsError() { document.getElementById('gpsText').innerText = 'تعذر الـ GPS'; }
 
 function resetRun() {
-  totalDistance = 0; residualDistance = 0; lapDist = 0; lastPoint = null; route = []; paceHistory = []; stepCount = 0;
+  totalDistanceMeters = 0; lastPoint = null; route = []; paceHistory = []; stepTimes = []; totalSteps = 0; lastKmAnnounced = 0;
   if (line) map.removeLayer(line); line = null;
   if (marker) map.removeLayer(marker); marker = null;
   document.getElementById('distance').innerText = '0.000';
+  document.getElementById('metersExact').innerText = '0';
   document.getElementById('speed').innerText = '0.0';
   document.getElementById('avgPace').innerText = '--:--';
   document.getElementById('currentPace').innerText = '--:--';
   document.getElementById('steps').innerText = '0';
+  document.getElementById('calories').innerText = '0';
 }
 
 function saveRun(r) {
-  let h = JSON.parse(localStorage.getItem('runtrack_v6') || '[]');
-  h.unshift(r); localStorage.setItem('runtrack_v6', JSON.stringify(h.slice(0, 10)));
+  let h = JSON.parse(localStorage.getItem('runtrack_v7') || '[]');
+  h.unshift(r); localStorage.setItem('runtrack_v7', JSON.stringify(h.slice(0, 10)));
 }
 
 function loadHistory() {
-  let h = JSON.parse(localStorage.getItem('runtrack_v6') || '[]');
+  let h = JSON.parse(localStorage.getItem('runtrack_v7') || '[]');
   if (!h.length) return;
   document.getElementById('history').innerHTML = h.map(x => `
     <div class="history-item">
       <div>${x.date}</div>
       <div>${x.dist.toFixed(3)} كم</div>
-      <div>${formatPace(x.pace)} /كم</div>
+      <div>${formatPace(x.pace)}/كم</div>
+      <div>${x.steps || 0} خطوة</div>
     </div>`).join('');
 }
 loadHistory();
